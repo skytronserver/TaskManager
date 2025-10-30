@@ -148,9 +148,9 @@ const TaskManagement = () => {
     filterStatus === 'all' ? tasks : tasks.filter((t) => t.status === filterStatus);
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
-      <div className="bg-white rounded-lg shadow-md p-8">
-        <h1 className="text-3xl font-semibold text-blue-600 mb-6">
+    <div className="w-full max-w-7xl mx-auto">
+      <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 md:p-8">
+        <h1 className="text-2xl sm:text-3xl font-semibold text-blue-600 mb-4 sm:mb-6">
           Task Management
         </h1>
 

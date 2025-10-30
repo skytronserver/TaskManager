@@ -14,7 +14,7 @@ function App() {
         onMenuClick={() => setMobileSidebarOpen(true)}
       />
 
-      <div className="flex flex-1 pt-16">
+      <div className="flex flex-1 pt-[70px]">
         {/* Sidebar */}
         <Sidebar
           open={true}
@@ -23,7 +23,7 @@ function App() {
         />
         
         {/* Main Content */}
-        <main className="flex-1 p-4 md:p-8">
+        <main className="flex-1 w-full md:ml-0 p-3 sm:p-4 md:p-6 lg:p-8 overflow-x-hidden">
           <AppRoutes />
         </main>
       </div>

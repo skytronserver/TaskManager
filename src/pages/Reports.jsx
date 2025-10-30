@@ -43,11 +43,11 @@ const Reports = () => {
 
   const renderTaskReport = () => (
     <div className="bg-white rounded-lg p-6">
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
         <h3 className="text-lg font-semibold text-gray-800">Task Report</h3>
         <button
           onClick={() => handleExport('Task')}
-          className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 text-sm"
+          className="w-full sm:w-auto px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 text-sm"
         >
           📥 Export to Excel
         </button>
@@ -88,7 +88,7 @@ const Reports = () => {
           </tbody>
         </table>
       </div>
-      <div className="mt-4 grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
         <div className="bg-blue-50 rounded-lg p-4">
           <p className="text-sm text-gray-600">Total Tasks</p>
           <p className="text-2xl font-bold text-blue-600">{taskReportData.length}</p>
@@ -223,11 +223,11 @@ const Reports = () => {
 
   const renderAlertReport = () => (
     <div className="bg-white rounded-lg p-6">
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
         <h3 className="text-lg font-semibold text-gray-800">Alert Report</h3>
         <button
           onClick={() => handleExport('Alert')}
-          className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 text-sm"
+          className="w-full sm:w-auto px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 text-sm"
         >
           📥 Export to Excel
         </button>
@@ -278,7 +278,7 @@ const Reports = () => {
           </tbody>
         </table>
       </div>
-      <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="mt-4 grid grid-cols-2 md:grid-cols-2 gap-3 sm:gap-4">
         <div className="bg-green-50 rounded-lg p-4">
           <p className="text-sm text-gray-600">Active Alerts</p>
           <p className="text-2xl font-bold text-green-600">
@@ -296,13 +296,16 @@ const Reports = () => {
   );
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
-      <div className="bg-white rounded-lg shadow-md p-8">
-        <h1 className="text-3xl font-semibold text-blue-600 mb-6">Reports</h1>
+    <div className="w-full max-w-7xl mx-auto">
+      <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 md:p-8">
+        <h1 className="text-2xl sm:text-3xl font-semibold text-blue-600 mb-4 sm:mb-6">
+          Reports
+        </h1>
 
         {/* Date Range Filter */}
-        <div className="bg-gray-50 rounded-lg p-4 mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+        <div className="bg-gray-50 rounded-lg p-4 sm:p-6 mb-6">
+          <h2 className="text-lg font-medium text-gray-700 mb-4">Date Range Filter</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Start Date
@@ -329,7 +332,7 @@ const Reports = () => {
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
-            <div>
+            <div className="flex items-end">
               <button className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
                 Apply Filter
               </button>
@@ -339,10 +342,10 @@ const Reports = () => {
 
         {/* Tabs */}
         <div className="border-b border-gray-200 mb-6">
-          <div className="flex gap-4">
+          <div className="flex gap-2 sm:gap-4 overflow-x-auto">
             <button
               onClick={() => setActiveTab('task')}
-              className={`px-4 py-2 font-medium transition-colors ${
+              className={`px-3 sm:px-4 py-2 text-sm sm:text-base font-medium transition-colors whitespace-nowrap ${
                 activeTab === 'task'
                   ? 'text-blue-600 border-b-2 border-blue-600'
                   : 'text-gray-600 hover:text-gray-800'
@@ -352,7 +355,7 @@ const Reports = () => {
             </button>
             <button
               onClick={() => setActiveTab('team')}
-              className={`px-4 py-2 font-medium transition-colors ${
+              className={`px-3 sm:px-4 py-2 text-sm sm:text-base font-medium transition-colors whitespace-nowrap ${
                 activeTab === 'team'
                   ? 'text-blue-600 border-b-2 border-blue-600'
                   : 'text-gray-600 hover:text-gray-800'
@@ -362,7 +365,7 @@ const Reports = () => {
             </button>
             <button
               onClick={() => setActiveTab('query')}
-              className={`px-4 py-2 font-medium transition-colors ${
+              className={`px-3 sm:px-4 py-2 text-sm sm:text-base font-medium transition-colors whitespace-nowrap ${
                 activeTab === 'query'
                   ? 'text-blue-600 border-b-2 border-blue-600'
                   : 'text-gray-600 hover:text-gray-800'
@@ -372,7 +375,7 @@ const Reports = () => {
             </button>
             <button
               onClick={() => setActiveTab('alert')}
-              className={`px-4 py-2 font-medium transition-colors ${
+              className={`px-3 sm:px-4 py-2 text-sm sm:text-base font-medium transition-colors whitespace-nowrap ${
                 activeTab === 'alert'
                   ? 'text-blue-600 border-b-2 border-blue-600'
                   : 'text-gray-600 hover:text-gray-800'
@@ -391,11 +394,11 @@ const Reports = () => {
           {activeTab === 'alert' && renderAlertReport()}
         </div>
 
-        <div className="flex gap-4 justify-end mt-8">
+        <div className="flex gap-4 justify-end mt-6 sm:mt-8">
           <button
             type="button"
             onClick={() => navigate('/')}
-            className="px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100"
+            className="w-full sm:w-auto px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100"
           >
             Back to Dashboard
           </button>

@@ -119,9 +119,9 @@ const CreateTeamLeader = () => {
   };
 
  return (
-  <div className="max-w-7xl mx-auto p-6">
-    <div className="bg-white rounded-lg shadow-md p-8">
-      <h1 className="text-3xl font-semibold text-blue-600 mb-6">
+  <div className="w-full max-w-7xl mx-auto">
+    <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 md:p-8">
+      <h1 className="text-2xl sm:text-3xl font-semibold text-blue-600 mb-4 sm:mb-6">
         Create Team Leader
       </h1>
 
@@ -372,18 +372,18 @@ const CreateTeamLeader = () => {
         </div>
 
         {/* Buttons */}
-        <div className="flex gap-4 justify-end">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-end">
           <button
             type="button"
             onClick={handleReset}
-            className="px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100"
+            className="w-full sm:w-auto px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100"
           >
             Reset
           </button>
           <button
             type="submit"
             onClick={handleSubmit}
-            className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            className="w-full sm:w-auto px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
           >
             Create Team Leader
           </button>

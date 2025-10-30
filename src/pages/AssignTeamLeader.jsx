@@ -1,25 +1,4 @@
 import React, { useState } from 'react';
-import {
-  Box,
-  Paper,
-  Typography,
-  Button,
-  Grid,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Card,
-  CardContent,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Chip,
-  Alert,
-} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 const AssignTeamLeader = () => {
@@ -97,120 +76,111 @@ const AssignTeamLeader = () => {
   };
 
   return (
-    <Box sx={{ maxWidth: 1400, mx: 'auto', p: 3 }}>
-      <Paper elevation={3} sx={{ p: 4, borderRadius: 2 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-          <Typography variant="h4" sx={{ fontWeight: 600, color: '#1976d2' }}>
+    <div className="w-full max-w-7xl mx-auto">
+      <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 md:p-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 sm:mb-6">
+          <h1 className="text-2xl sm:text-3xl font-semibold text-blue-600">
             Assign Team Leader
-          </Typography>
-          <Button
-            variant="contained"
-            color="primary"
+          </h1>
+          <button
             onClick={handleBulkAssign}
             disabled={Object.keys(assignments).length === 0}
-            sx={{ px: 4 }}
+            className={`w-full sm:w-auto px-6 py-2 rounded-md font-medium transition-colors ${
+              Object.keys(assignments).length === 0
+                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                : 'bg-blue-600 text-white hover:bg-blue-700'
+            }`}
           >
             Save All Assignments ({Object.keys(assignments).length})
-          </Button>
-        </Box>
+          </button>
+        </div>
 
         {successMessage && (
-          <Alert severity="success" sx={{ mb: 3 }}>
+          <div className="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-md mb-4 sm:mb-6">
             {successMessage}
-          </Alert>
+          </div>
         )}
 
-        <Card>
-          <CardContent>
-            <Typography variant="h6" gutterBottom sx={{ mb: 2, color: '#555' }}>
-              Team Members
-            </Typography>
+        <div className="bg-gray-50 rounded-lg p-4 sm:p-6">
+          <h2 className="text-lg sm:text-xl font-medium text-gray-700 mb-4">
+            Team Members
+          </h2>
 
-            <TableContainer>
-              <Table>
-                <TableHead>
-                  <TableRow sx={{ bgcolor: '#f5f5f5' }}>
-                    <TableCell sx={{ fontWeight: 600 }}>Employee ID</TableCell>
-                    <TableCell sx={{ fontWeight: 600 }}>Name</TableCell>
-                    <TableCell sx={{ fontWeight: 600 }}>Department</TableCell>
-                    <TableCell sx={{ fontWeight: 600 }}>Role</TableCell>
-                    <TableCell sx={{ fontWeight: 600 }}>Current Leader</TableCell>
-                    <TableCell sx={{ fontWeight: 600 }}>Assign New Leader</TableCell>
-                    <TableCell sx={{ fontWeight: 600 }}>Action</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {teamMembers.map((member) => (
-                    <TableRow key={member.id} hover>
-                      <TableCell>{member.employeeId}</TableCell>
-                      <TableCell>{member.name}</TableCell>
-                      <TableCell>{member.department}</TableCell>
-                      <TableCell>{member.role}</TableCell>
-                      <TableCell>
-                        {member.currentLeader ? (
-                          <Chip
-                            label={member.currentLeader}
-                            color="primary"
-                            size="small"
-                            variant="outlined"
-                          />
-                        ) : (
-                          <Chip
-                            label="Not Assigned"
-                            color="default"
-                            size="small"
-                          />
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        <FormControl fullWidth size="small" sx={{ minWidth: 200 }}>
-                          <InputLabel>Select Team Leader</InputLabel>
-                          <Select
-                            value={assignments[member.id] || ''}
-                            onChange={(e) => handleLeaderChange(member.id, e.target.value)}
-                            label="Select Team Leader"
-                          >
-                            <MenuItem value="">
-                              <em>None</em>
-                            </MenuItem>
-                            {teamLeaders.map((leader) => (
-                              <MenuItem key={leader.id} value={leader.id}>
-                                {leader.name} ({leader.department})
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
-                      </TableCell>
-                      <TableCell>
-                        <Button
-                          variant="contained"
-                          size="small"
-                          onClick={() => handleAssign(member.id)}
-                          disabled={!assignments[member.id]}
-                        >
-                          Assign
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </CardContent>
-        </Card>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-gray-100">
+                <tr>
+                  <th className="px-3 sm:px-4 py-3 text-left font-semibold text-gray-700 whitespace-nowrap">Employee ID</th>
+                  <th className="px-3 sm:px-4 py-3 text-left font-semibold text-gray-700 whitespace-nowrap">Name</th>
+                  <th className="px-3 sm:px-4 py-3 text-left font-semibold text-gray-700 whitespace-nowrap">Department</th>
+                  <th className="px-3 sm:px-4 py-3 text-left font-semibold text-gray-700 whitespace-nowrap">Role</th>
+                  <th className="px-3 sm:px-4 py-3 text-left font-semibold text-gray-700 whitespace-nowrap">Current Leader</th>
+                  <th className="px-3 sm:px-4 py-3 text-left font-semibold text-gray-700 whitespace-nowrap">Assign New Leader</th>
+                  <th className="px-3 sm:px-4 py-3 text-left font-semibold text-gray-700 whitespace-nowrap">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {teamMembers.map((member) => (
+                  <tr key={member.id} className="border-b border-gray-200 hover:bg-gray-50">
+                    <td className="px-3 sm:px-4 py-3 whitespace-nowrap">{member.employeeId}</td>
+                    <td className="px-3 sm:px-4 py-3 whitespace-nowrap">{member.name}</td>
+                    <td className="px-3 sm:px-4 py-3 whitespace-nowrap">{member.department}</td>
+                    <td className="px-3 sm:px-4 py-3 whitespace-nowrap">{member.role}</td>
+                    <td className="px-3 sm:px-4 py-3">
+                      {member.currentLeader ? (
+                        <span className="px-2 py-1 bg-blue-100 text-blue-700 border border-blue-300 rounded-full text-xs font-medium whitespace-nowrap">
+                          {member.currentLeader}
+                        </span>
+                      ) : (
+                        <span className="px-2 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-medium whitespace-nowrap">
+                          Not Assigned
+                        </span>
+                      )}
+                    </td>
+                    <td className="px-3 sm:px-4 py-3">
+                      <select
+                        value={assignments[member.id] || ''}
+                        onChange={(e) => handleLeaderChange(member.id, e.target.value)}
+                        className="w-full min-w-[200px] px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                      >
+                        <option value="">Select Team Leader</option>
+                        {teamLeaders.map((leader) => (
+                          <option key={leader.id} value={leader.id}>
+                            {leader.name} ({leader.department})
+                          </option>
+                        ))}
+                      </select>
+                    </td>
+                    <td className="px-3 sm:px-4 py-3">
+                      <button
+                        onClick={() => handleAssign(member.id)}
+                        disabled={!assignments[member.id]}
+                        className={`px-4 py-2 rounded-md text-sm font-medium whitespace-nowrap ${
+                          !assignments[member.id]
+                            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                            : 'bg-blue-600 text-white hover:bg-blue-700'
+                        }`}
+                      >
+                        Assign
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
 
-        <Box sx={{ mt: 3, display: 'flex', gap: 2 }}>
-          <Button
-            variant="outlined"
-            color="secondary"
+        <div className="flex gap-4 justify-end mt-6 sm:mt-8">
+          <button
             onClick={() => navigate('/')}
-            sx={{ px: 4 }}
+            className="w-full sm:w-auto px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100"
           >
             Back to Dashboard
-          </Button>
-        </Box>
-      </Paper>
-    </Box>
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 

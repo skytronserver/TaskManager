@@ -173,17 +173,17 @@ const MyTasks = () => {
   const stats = getTaskStats();
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
-      <div className="bg-white rounded-lg shadow-md p-8">
-        <div className="flex justify-between items-center mb-6">
+    <div className="w-full max-w-7xl mx-auto">
+      <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 md:p-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6 gap-3">
           <div>
-            <h1 className="text-3xl font-semibold text-blue-600">My Tasks</h1>
+            <h1 className="text-2xl sm:text-3xl font-semibold text-blue-600">My Tasks</h1>
             <p className="text-gray-600 mt-1">Assigned to: {currentUser}</p>
           </div>
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
           <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-4 border border-blue-200">
             <p className="text-sm text-gray-600 mb-1">Total Tasks</p>
             <p className="text-3xl font-bold text-blue-600">{stats.total}</p>
@@ -460,11 +460,11 @@ const MyTasks = () => {
           </div>
         </div>
 
-        <div className="flex gap-4 justify-end mt-8">
+        <div className="flex gap-4 justify-end mt-6 sm:mt-8">
           <button
             type="button"
             onClick={() => navigate('/')}
-            className="px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100"
+            className="w-full sm:w-auto px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100"
           >
             Back to Dashboard
           </button>
