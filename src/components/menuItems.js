@@ -12,15 +12,20 @@ export const menuItems = {
   CreateUsers: [
     { text: 'Create Team Leader', icon: '👤', path: '/create-team-leader', roles: ['admin'] },
     { text: 'Create Team Member', icon: '👥', path: '/create-team-member', roles: ['admin'] },
-    { text: 'Assign Team Leader', icon: '🔗', path: '/assign-team-leader', roles: ['admin'] },
   ],
 
-  // Tasks: [
-  //   { text: 'My Tasks', icon: '✅', path: '/my-tasks', roles: ['user'] },
-  //   { text: 'Assign Task', icon: '📝', path: '/assign-task', roles: ['admin'] },
-  //   { text: 'Task Management', icon: '📋', path: '/task-management', roles: ['admin'] },
-  //   { text: 'Query & Reply', icon: '💬', path: '/query-reply', roles: ['admin', 'user'] },
-  // ],
+  Projects: [
+    { text: 'Create Project', icon: '📁', path: '/create-project', roles: ['admin'] },
+    { text: 'Project Management', icon: '📂', path: '/project-management', roles: ['admin'] },
+  ],
+
+  Tasks: [
+    // { text: 'My Tasks', icon: '✅', path: '/my-tasks', roles: ['member'] },
+    { text: 'Assign Task', icon: '📝', path: '/assign-task', roles: ['admin'] },
+    { text: 'Task Management', icon: '📋', path: '/task-management', roles: ['admin'] },
+    // { text: 'My Queries', icon: '💬', path: '/member-query', roles: ['member'] },
+    // { text: 'Query & Reply', icon: '💬', path: '/query-reply', roles: ['admin', 'user'] },
+  ],
 
   // Alerts: [
   //   { text: 'Alert Management', icon: '🔔', path: '/alert-management', roles: ['admin', 'user'] },

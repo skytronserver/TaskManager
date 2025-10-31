@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 const AssignTask = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
+    project: '',
     taskTitle: '',
     taskDescription: '',
     assignTo: '',
@@ -18,6 +19,15 @@ const AssignTask = () => {
   });
 
   const [errors, setErrors] = useState({});
+
+  // Mock data - Replace with API calls
+  const projects = [
+    { id: 1, name: 'Mobile App Development', code: 'PROJ-2024-001', team: 'Engineering Team' },
+    { id: 2, name: 'Marketing Campaign Q1', code: 'PROJ-2024-002', team: 'Marketing Team' },
+    { id: 3, name: 'Sales Process Optimization', code: 'PROJ-2024-003', team: 'Sales Team' },
+    { id: 4, name: 'Customer Support Portal', code: 'PROJ-2023-015', team: 'Support Team' },
+    { id: 5, name: 'Financial System Upgrade', code: 'PROJ-2024-004', team: 'Finance Team' },
+  ];
 
   const users = ['John Doe', 'Jane Smith', 'Mike Johnson', 'Sarah Williams'];
   const teams = ['Development Team', 'Marketing Team', 'Sales Team', 'Support Team'];
@@ -40,6 +50,9 @@ const AssignTask = () => {
   const validateForm = () => {
     const newErrors = {};
 
+    if (!formData.project) {
+      newErrors.project = 'Project selection is required';
+    }
     if (!formData.taskTitle.trim()) {
       newErrors.taskTitle = 'Task title is required';
     }
@@ -74,6 +87,7 @@ const AssignTask = () => {
 
   const handleReset = () => {
     setFormData({
+      project: '',
       taskTitle: '',
       taskDescription: '',
       assignTo: '',
@@ -97,6 +111,41 @@ const AssignTask = () => {
         </h1>
 
         <div className="space-y-6">
+          {/* Project Selection */}
+          <div className="bg-blue-50 rounded-lg p-6 border border-blue-200">
+            <h2 className="text-xl font-medium text-gray-700 mb-4">
+              Select Project
+            </h2>
+            <div className="grid grid-cols-1 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Project <span className="text-red-500">*</span>
+                </label>
+                <select
+                  name="project"
+                  value={formData.project}
+                  onChange={handleChange}
+                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white ${
+                    errors.project ? 'border-red-500' : 'border-gray-300'
+                  }`}
+                >
+                  <option value="">Select project</option>
+                  {projects.map((project) => (
+                    <option key={project.id} value={project.id}>
+                      {project.name} ({project.code}) - {project.team}
+                    </option>
+                  ))}
+                </select>
+                {errors.project && (
+                  <p className="text-sm text-red-500 mt-1">{errors.project}</p>
+                )}
+                <p className="text-xs text-gray-600 mt-1">
+                  Tasks must be assigned to a project. Select the project this task belongs to.
+                </p>
+              </div>
+            </div>
+          </div>
+
           {/* Task Information */}
           <div className="bg-gray-50 rounded-lg p-6">
             <h2 className="text-xl font-medium text-gray-700 mb-4">
@@ -250,7 +299,7 @@ const AssignTask = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Reported By
+                  Assigned By (Task Creator/Manager)
                 </label>
                 <select
                   name="reportedBy"
@@ -258,13 +307,16 @@ const AssignTask = () => {
                   onChange={handleChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                 >
-                  <option value="">Select reporter</option>
+                  <option value="">Select who is assigning this task</option>
                   {users.map((user) => (
                     <option key={user} value={user}>
                       {user}
                     </option>
                   ))}
                 </select>
+                <p className="text-xs text-gray-600 mt-1">
+                  The person creating/assigning this task (usually team leader or project manager)
+                </p>
               </div>
             </div>
           </div>

@@ -94,6 +94,7 @@ const Sidebar = ({ open = true, mobileOpen = false, onMobileClose = () => {} }) 
     main: true,
     Team: true,
     CreateUsers: true,
+    Projects: true,
     Tasks: true,
     Alerts: true,
     Reports: true,
@@ -205,6 +206,11 @@ const Sidebar = ({ open = true, mobileOpen = false, onMobileClose = () => {} }) 
 
         {renderCategory('Team', menuItems.Team, 'Team')}
         {filterMenuItems(menuItems.Team).length > 0 && (
+          <Divider sx={{ my: 2, opacity: 0.5 }} />
+        )}
+
+        {renderCategory('Projects', menuItems.Projects, 'Projects')}
+        {filterMenuItems(menuItems.Projects).length > 0 && (
           <Divider sx={{ my: 2, opacity: 0.5 }} />
         )}
 

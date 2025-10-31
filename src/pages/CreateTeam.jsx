@@ -10,9 +10,11 @@ const CreateTeam = () => {
     teamLeader: '',
     maxMembers: '',
     createdDate: '',
+    teamMembers: [],
   });
 
   const [errors, setErrors] = useState({});
+  const [selectedMember, setSelectedMember] = useState('');
 
   const departments = [
     'Sales',
@@ -30,6 +32,18 @@ const CreateTeam = () => {
     'Mike Johnson',
     'Sarah Williams',
     'David Brown',
+  ];
+
+  // Mock available team members - Replace with API call
+  const availableMembers = [
+    { id: 1, name: 'Alice Johnson', employeeId: 'EMP001', department: 'Engineering', role: 'Senior Developer' },
+    { id: 2, name: 'Bob Smith', employeeId: 'EMP002', department: 'Sales', role: 'Sales Executive' },
+    { id: 3, name: 'Charlie Brown', employeeId: 'EMP003', department: 'Marketing', role: 'Marketing Specialist' },
+    { id: 4, name: 'Diana Prince', employeeId: 'EMP004', department: 'Engineering', role: 'Junior Developer' },
+    { id: 5, name: 'Eve Wilson', employeeId: 'EMP005', department: 'Finance', role: 'Financial Analyst' },
+    { id: 6, name: 'Frank Miller', employeeId: 'EMP006', department: 'Operations', role: 'Operations Associate' },
+    { id: 7, name: 'Grace Lee', employeeId: 'EMP007', department: 'Customer Support', role: 'Support Engineer' },
+    { id: 8, name: 'Henry Davis', employeeId: 'EMP008', department: 'Engineering', role: 'Senior Developer' },
   ];
 
   const handleChange = (e) => {
@@ -95,8 +109,42 @@ const CreateTeam = () => {
       teamLeader: '',
       maxMembers: '',
       createdDate: '',
+      teamMembers: [],
     });
     setErrors({});
+    setSelectedMember('');
+  };
+
+  const handleAddMember = () => {
+    if (!selectedMember) {
+      alert('Please select a team member');
+      return;
+    }
+
+    const member = availableMembers.find((m) => m.id === parseInt(selectedMember));
+    
+    if (formData.teamMembers.find((m) => m.id === member.id)) {
+      alert('This member is already added to the team');
+      return;
+    }
+
+    if (formData.maxMembers && formData.teamMembers.length >= parseInt(formData.maxMembers)) {
+      alert(`Cannot add more than ${formData.maxMembers} members`);
+      return;
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      teamMembers: [...prev.teamMembers, member],
+    }));
+    setSelectedMember('');
+  };
+
+  const handleRemoveMember = (memberId) => {
+    setFormData((prev) => ({
+      ...prev,
+      teamMembers: prev.teamMembers.filter((m) => m.id !== memberId),
+    }));
   };
 
   return (
@@ -238,6 +286,80 @@ const CreateTeam = () => {
                 />
               </div>
             </div>
+          </div>
+
+          {/* Team Members Section */}
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h2 className="text-xl font-medium text-gray-700 mb-4">
+              Add Team Members
+            </h2>
+            
+            <div className="flex gap-3 mb-4">
+              <select
+                value={selectedMember}
+                onChange={(e) => setSelectedMember(e.target.value)}
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+              >
+                <option value="">Select a team member</option>
+                {availableMembers.map((member) => (
+                  <option key={member.id} value={member.id}>
+                    {member.name} - {member.employeeId} ({member.department})
+                  </option>
+                ))}
+              </select>
+              <button
+                type="button"
+                onClick={handleAddMember}
+                className="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 whitespace-nowrap"
+              >
+                Add Member
+              </button>
+            </div>
+
+            {formData.teamMembers.length > 0 && (
+              <div className="mt-4">
+                <h3 className="text-sm font-medium text-gray-700 mb-2">
+                  Selected Members ({formData.teamMembers.length}
+                  {formData.maxMembers ? ` / ${formData.maxMembers}` : ''})
+                </h3>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm border border-gray-200 rounded-md">
+                    <thead className="bg-gray-100">
+                      <tr>
+                        <th className="px-4 py-2 text-left font-semibold text-gray-700">Employee ID</th>
+                        <th className="px-4 py-2 text-left font-semibold text-gray-700">Name</th>
+                        <th className="px-4 py-2 text-left font-semibold text-gray-700">Department</th>
+                        <th className="px-4 py-2 text-left font-semibold text-gray-700">Role</th>
+                        <th className="px-4 py-2 text-left font-semibold text-gray-700">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {formData.teamMembers.map((member) => (
+                        <tr key={member.id} className="border-t border-gray-200 hover:bg-gray-50">
+                          <td className="px-4 py-2">{member.employeeId}</td>
+                          <td className="px-4 py-2">{member.name}</td>
+                          <td className="px-4 py-2">{member.department}</td>
+                          <td className="px-4 py-2">{member.role}</td>
+                          <td className="px-4 py-2">
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveMember(member.id)}
+                              className="px-3 py-1 bg-red-500 text-white text-xs rounded hover:bg-red-600"
+                            >
+                              Remove
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {formData.teamMembers.length === 0 && (
+              <p className="text-sm text-gray-500 italic">No team members added yet</p>
+            )}
           </div>
 
           {/* Buttons */}

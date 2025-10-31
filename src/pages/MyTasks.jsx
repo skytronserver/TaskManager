@@ -56,17 +56,13 @@ const MyTasks = () => {
   const [actionType, setActionType] = useState('');
   const [actionNote, setActionNote] = useState('');
   const [extensionDate, setExtensionDate] = useState('');
-  const [queryText, setQueryText] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
-  const [showQueryModal, setShowQueryModal] = useState(false);
 
   const handleTaskSelect = (task) => {
     setSelectedTask(task);
     setActionType('');
     setActionNote('');
     setExtensionDate('');
-    setQueryText('');
-    setShowQueryModal(false);
   };
 
   const handleStartTask = () => {
@@ -115,17 +111,6 @@ const MyTasks = () => {
     setActionType('');
     setActionNote('');
     setExtensionDate('');
-  };
-
-  const handleRaiseQuery = () => {
-    if (!queryText.trim()) {
-      alert('Please enter your query');
-      return;
-    }
-
-    alert('Query submitted successfully! You will receive a response soon.');
-    setShowQueryModal(false);
-    setQueryText('');
   };
 
   const getStatusColor = (status) => {
@@ -406,45 +391,11 @@ const MyTasks = () => {
                       )}
 
                       <button
-                        onClick={() => setShowQueryModal(!showQueryModal)}
+                        onClick={() => navigate('/member-query')}
                         className="w-full px-4 py-3 bg-purple-600 text-white rounded-md hover:bg-purple-700 font-medium"
                       >
-                        💬 Raise Query
+                        💬 Go to My Queries
                       </button>
-
-                      {showQueryModal && (
-                        <div className="bg-white rounded-lg p-4 space-y-3">
-                          <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
-                              Your Query <span className="text-red-500">*</span>
-                            </label>
-                            <textarea
-                              value={queryText}
-                              onChange={(e) => setQueryText(e.target.value)}
-                              rows="4"
-                              placeholder="Type your query here..."
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            />
-                          </div>
-                          <div className="flex gap-2">
-                            <button
-                              onClick={() => {
-                                setShowQueryModal(false);
-                                setQueryText('');
-                              }}
-                              className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100"
-                            >
-                              Cancel
-                            </button>
-                            <button
-                              onClick={handleRaiseQuery}
-                              className="flex-1 px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700"
-                            >
-                              Submit Query
-                            </button>
-                          </div>
-                        </div>
-                      )}
                     </>
                   )}
                 </div>

@@ -3,7 +3,8 @@ import Dashboard from './components/Dashboard'
 import CreateTeam from './pages/CreateTeam'
 import CreateTeamLeader from './pages/CreateTeamLeader'
 import CreateTeamMember from './pages/CreateTeamMember'
-import AssignTeamLeader from './pages/AssignTeamLeader'
+import CreateProject from './pages/CreateProject'
+import ProjectManagement from './pages/ProjectManagement'
 import TaskMethodology from './pages/TaskMethodology'
 import Designation from './pages/Designation'
 import AssignTask from './pages/AssignTask'
@@ -12,6 +13,7 @@ import AlertManagement from './pages/AlertManagement'
 import TaskManagement from './pages/TaskManagement'
 import Reports from './pages/Reports'
 import MyTasks from './pages/MyTasks'
+import MemberQuery from './pages/MemberQuery'
 
 export default function AppRoutes() {
   return (
@@ -20,11 +22,13 @@ export default function AppRoutes() {
       <Route path="/create-team" element={<CreateTeam />} />
       <Route path="/create-team-leader" element={<CreateTeamLeader />} />
       <Route path="/create-team-member" element={<CreateTeamMember />} />
-      <Route path="/assign-team-leader" element={<AssignTeamLeader />} />
+      <Route path="/create-project" element={<CreateProject />} />
+      <Route path="/project-management" element={<ProjectManagement />} />
       <Route path="/task-methodology" element={<TaskMethodology />} />
       <Route path="/designation" element={<Designation />} />
       <Route path="/assign-task" element={<AssignTask />} />
       <Route path="/my-tasks" element={<MyTasks />} />
+      <Route path="/member-query" element={<MemberQuery />} />
       <Route path="/query-reply" element={<QueryReply />} />
       <Route path="/alert-management" element={<AlertManagement />} />
       <Route path="/task-management" element={<TaskManagement />} />

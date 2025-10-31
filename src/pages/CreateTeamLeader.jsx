@@ -323,7 +323,7 @@ const CreateTeamLeader = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Zip Code
+                  PinCode
                 </label>
                 <input
                   type="text"

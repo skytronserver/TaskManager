@@ -288,11 +288,19 @@ const TaskManagement = () => {
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                     >
                       <option value="">Choose an action</option>
-                      <option value="approve">Approve</option>
-                      <option value="extension">Request Extension</option>
-                      <option value="abandon">Abandon</option>
-                      <option value="close">Close</option>
-                      <option value="completed">Mark as Completed</option>
+                      {selectedTask.status === 'completed' && (
+                        <option value="approve">Approve Task</option>
+                      )}
+                      {selectedTask.status === 'extension-requested' && (
+                        <option value="extension">Grant Extension</option>
+                      )}
+                      {(selectedTask.status === 'pending' || selectedTask.status === 'in-progress') && (
+                        <>
+                          <option value="abandon">Abandon Task</option>
+                          <option value="completed">Mark as Completed</option>
+                        </>
+                      )}
+                      <option value="close">Close Task</option>
                     </select>
                   </div>
 
