@@ -3,29 +3,43 @@ export const menuItems = {
     { text: 'Dashboard', icon: '📊', path: '/', roles: ['admin', 'user'] },
   ],
 
-  Team: [
-    { text: 'Create Team', icon: '👥', path: '/create-team', roles: ['admin'] },
+  Company: [
+    { text: 'Create Company', icon: '🏢', path: '/create-company', roles: ['admin'] },
+  ],
+
+  Department: [
+    { text: 'Create Department(Optional)', icon: '🏛️', path: '/create-department', roles: ['admin'] },
+  ],
+
+   CreateUsers: [
+    { text: 'Create User', icon: '👤', path: '/create-user', roles: ['admin'] },
+  ],
+
+
+  Organization: [
     { text: 'Task Methodology', icon: '⚙️', path: '/task-methodology', roles: ['admin'] },
-    { text: 'Designation', icon: '🏢', path: '/designation', roles: ['admin'] },
+    { text: 'Organisational Hierarchy', icon: '🎯', path: '/designation', roles: ['admin'] },
   ],
 
   CreateUsers: [
-    { text: 'Create Team Leader', icon: '👤', path: '/create-team-leader', roles: ['admin'] },
-    { text: 'Create Team Member', icon: '👥', path: '/create-team-member', roles: ['admin'] },
+    { text: 'Create User', icon: '👤', path: '/create-user', roles: ['admin'] },
   ],
 
-  Projects: [
-    { text: 'Create Project', icon: '📁', path: '/create-project', roles: ['admin'] },
-    { text: 'Project Management', icon: '📂', path: '/project-management', roles: ['admin'] },
-  ],
+  // Assign: [
+  //   { text: 'Task', icon: '📝', path: '/assign-task', roles: ['admin'] },
+  //   { text: 'Project', icon: '📁', path: '/create-project', roles: ['admin'] },
+  // ],
 
-  Tasks: [
-    // { text: 'My Tasks', icon: '✅', path: '/my-tasks', roles: ['member'] },
-    { text: 'Assign Task', icon: '📝', path: '/assign-task', roles: ['admin'] },
-    { text: 'Task Management', icon: '📋', path: '/task-management', roles: ['admin'] },
-    // { text: 'My Queries', icon: '💬', path: '/member-query', roles: ['member'] },
-    // { text: 'Query & Reply', icon: '💬', path: '/query-reply', roles: ['admin', 'user'] },
-  ],
+  // Management: [
+  //   { text: 'Task Management', icon: '📋', path: '/task-management', roles: ['admin'] },
+  //   { text: 'Project Management', icon: '📂', path: '/project-management', roles: ['admin'] },
+  // ],
+
+  // MyWork: [
+  //   { text: 'My Tasks', icon: '✅', path: '/my-tasks', roles: ['member'] },
+  //   { text: 'My Queries', icon: '💬', path: '/member-query', roles: ['member'] },
+  //   { text: 'Query & Reply', icon: '💬', path: '/query-reply', roles: ['admin', 'user'] },
+  // ],
 
   // Alerts: [
   //   { text: 'Alert Management', icon: '🔔', path: '/alert-management', roles: ['admin', 'user'] },

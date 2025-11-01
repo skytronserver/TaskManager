@@ -7,25 +7,62 @@ const CreateProject = () => {
     projectName: '',
     projectCode: '',
     description: '',
-    team: '',
-    projectManager: '',
+    teamLeader: '',
+    teamMembers: [],
     startDate: '',
     endDate: '',
-    budget: '',
     priority: '',
     status: 'planning',
     objectives: '',
   });
 
   const [errors, setErrors] = useState({});
+  const [showCreateTeam, setShowCreateTeam] = useState(false);
+  const [newTeam, setNewTeam] = useState({
+    teamName: '',
+    department: '',
+    teamLeader: '',
+    maxMembers: '',
+  });
+  const [teamErrors, setTeamErrors] = useState({});
+  const [selectedMember, setSelectedMember] = useState('');
 
   // Mock data - Replace with API calls
-  const teams = [
+  const [teams, setTeams] = useState([
     { id: 1, name: 'Engineering Team', department: 'Engineering' },
     { id: 2, name: 'Marketing Team', department: 'Marketing' },
     { id: 3, name: 'Sales Team', department: 'Sales' },
     { id: 4, name: 'Support Team', department: 'Customer Support' },
     { id: 5, name: 'Finance Team', department: 'Finance' },
+  ]);
+
+  const departments = [
+    'Sales',
+    'Marketing',
+    'Engineering',
+    'Human Resources',
+    'Finance',
+    'Operations',
+    'Customer Support',
+  ];
+
+  const teamLeaders = [
+    { id: 1, name: 'John Doe', employeeId: 'EMP001', designation: 'Team Leader' },
+    { id: 2, name: 'Jane Smith', employeeId: 'EMP002', designation: 'Senior Team Leader' },
+    { id: 3, name: 'Mike Johnson', employeeId: 'EMP003', designation: 'Team Leader' },
+    { id: 4, name: 'Sarah Williams', employeeId: 'EMP004', designation: 'Team Leader' },
+    { id: 5, name: 'David Brown', employeeId: 'EMP005', designation: 'Senior Team Leader' },
+  ];
+
+  const availableMembers = [
+    { id: 6, name: 'Alice Johnson', employeeId: 'EMP006', designation: 'Senior Developer' },
+    { id: 7, name: 'Bob Smith', employeeId: 'EMP007', designation: 'Junior Developer' },
+    { id: 8, name: 'Charlie Brown', employeeId: 'EMP008', designation: 'Marketing Specialist' },
+    { id: 9, name: 'Diana Prince', employeeId: 'EMP009', designation: 'Designer' },
+    { id: 10, name: 'Eve Wilson', employeeId: 'EMP010', designation: 'QA Engineer' },
+    { id: 11, name: 'Frank Miller', employeeId: 'EMP011', designation: 'DevOps Engineer' },
+    { id: 12, name: 'Grace Lee', employeeId: 'EMP012', designation: 'Business Analyst' },
+    { id: 13, name: 'Henry Davis', employeeId: 'EMP013', designation: 'Senior Developer' },
   ];
 
   const projectManagers = [
@@ -72,13 +109,7 @@ const CreateProject = () => {
       newErrors.projectCode = 'Project code is required';
     }
 
-    if (!formData.team) {
-      newErrors.team = 'Team assignment is required';
-    }
-
-    if (!formData.projectManager) {
-      newErrors.projectManager = 'Project manager is required';
-    }
+    // Team leader is optional - no validation needed
 
     if (!formData.startDate) {
       newErrors.startDate = 'Start date is required';
@@ -113,16 +144,95 @@ const CreateProject = () => {
       projectName: '',
       projectCode: '',
       description: '',
-      team: '',
-      projectManager: '',
+      teamLeader: '',
+      teamMembers: [],
       startDate: '',
       endDate: '',
-      budget: '',
       priority: '',
       status: 'planning',
       objectives: '',
     });
     setErrors({});
+    setSelectedMember('');
+  };
+
+  const handleTeamChange = (e) => {
+    const { name, value } = e.target;
+    setNewTeam((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    if (teamErrors[name]) {
+      setTeamErrors((prev) => ({
+        ...prev,
+        [name]: '',
+      }));
+    }
+  };
+
+  const validateTeam = () => {
+    const newErrors = {};
+    if (!newTeam.teamName.trim()) {
+      newErrors.teamName = 'Team name is required';
+    }
+    if (!newTeam.department) {
+      newErrors.department = 'Department is required';
+    }
+    if (!newTeam.teamLeader) {
+      newErrors.teamLeader = 'Team leader is required';
+    }
+    if (!newTeam.maxMembers) {
+      newErrors.maxMembers = 'Max members is required';
+    }
+    setTeamErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleCreateTeam = () => {
+    if (validateTeam()) {
+      const team = {
+        id: teams.length + 1,
+        name: newTeam.teamName,
+        department: newTeam.department,
+      };
+      setTeams([...teams, team]);
+      setNewTeam({ teamName: '', department: '', teamLeader: '', maxMembers: '' });
+      setShowCreateTeam(false);
+      alert('Team created successfully!');
+    }
+  };
+
+  const handleCancelTeam = () => {
+    setNewTeam({ teamName: '', department: '', teamLeader: '', maxMembers: '' });
+    setTeamErrors({});
+    setShowCreateTeam(false);
+  };
+
+  const handleAddMember = () => {
+    if (!selectedMember) {
+      alert('Please select a team member');
+      return;
+    }
+
+    const member = availableMembers.find((m) => m.id === parseInt(selectedMember));
+    
+    if (formData.teamMembers.find((m) => m.id === member.id)) {
+      alert('This member is already added to the team');
+      return;
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      teamMembers: [...prev.teamMembers, member],
+    }));
+    setSelectedMember('');
+  };
+
+  const handleRemoveMember = (memberId) => {
+    setFormData((prev) => ({
+      ...prev,
+      teamMembers: prev.teamMembers.filter((m) => m.id !== memberId),
+    }));
   };
 
   return (
@@ -209,64 +319,231 @@ const CreateProject = () => {
 
           {/* Team & Management */}
           <div className="bg-gray-50 rounded-lg p-6">
-            <h2 className="text-xl font-medium text-gray-700 mb-4">
-              Team & Management
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-medium text-gray-700">
+                Team & Management
+              </h2>
+              <button
+                type="button"
+                onClick={() => setShowCreateTeam(!showCreateTeam)}
+                className="px-4 py-2 bg-green-600 text-white text-sm rounded-md hover:bg-green-700"
+              >
+                {showCreateTeam ? '✕ Cancel' : '+ Create New Team'}
+              </button>
+            </div>
+
+            {/* Create Team Form */}
+            {showCreateTeam && (
+              <div className="mb-6 p-4 bg-white border-2 border-green-200 rounded-lg">
+                <h3 className="text-lg font-medium text-gray-700 mb-3">New Team Details</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Team Name <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      name="teamName"
+                      value={newTeam.teamName}
+                      onChange={handleTeamChange}
+                      className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 ${
+                        teamErrors.teamName ? 'border-red-500' : 'border-gray-300'
+                      }`}
+                      placeholder="e.g., Mobile Development Team"
+                    />
+                    {teamErrors.teamName && (
+                      <p className="text-sm text-red-500 mt-1">{teamErrors.teamName}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Department <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      name="department"
+                      value={newTeam.department}
+                      onChange={handleTeamChange}
+                      className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 bg-white ${
+                        teamErrors.department ? 'border-red-500' : 'border-gray-300'
+                      }`}
+                    >
+                      <option value="">Select department</option>
+                      {departments.map((dept) => (
+                        <option key={dept} value={dept}>
+                          {dept}
+                        </option>
+                      ))}
+                    </select>
+                    {teamErrors.department && (
+                      <p className="text-sm text-red-500 mt-1">{teamErrors.department}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Team Leader <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      name="teamLeader"
+                      value={newTeam.teamLeader}
+                      onChange={handleTeamChange}
+                      className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 bg-white ${
+                        teamErrors.teamLeader ? 'border-red-500' : 'border-gray-300'
+                      }`}
+                    >
+                      <option value="">Select team leader</option>
+                      {projectManagers.map((manager) => (
+                        <option key={manager} value={manager}>
+                          {manager}
+                        </option>
+                      ))}
+                    </select>
+                    {teamErrors.teamLeader && (
+                      <p className="text-sm text-red-500 mt-1">{teamErrors.teamLeader}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Max Members <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="number"
+                      name="maxMembers"
+                      value={newTeam.maxMembers}
+                      onChange={handleTeamChange}
+                      min="1"
+                      max="100"
+                      className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 ${
+                        teamErrors.maxMembers ? 'border-red-500' : 'border-gray-300'
+                      }`}
+                      placeholder="e.g., 10"
+                    />
+                    {teamErrors.maxMembers && (
+                      <p className="text-sm text-red-500 mt-1">{teamErrors.maxMembers}</p>
+                    )}
+                  </div>
+                </div>
+                <div className="flex gap-3 mt-4">
+                  <button
+                    type="button"
+                    onClick={handleCreateTeam}
+                    className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+                  >
+                    Save Team
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleCancelTeam}
+                    className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Assign to Team <span className="text-red-500">*</span>
+                  Team Leader <span className="text-gray-400 text-xs">(Optional)</span>
                 </label>
                 <select
-                  name="team"
-                  value={formData.team}
+                  name="teamLeader"
+                  value={formData.teamLeader}
                   onChange={handleChange}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white ${
-                    errors.team ? 'border-red-500' : 'border-gray-300'
-                  }`}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                 >
-                  <option value="">Select team</option>
-                  {teams.map((team) => (
-                    <option key={team.id} value={team.id}>
-                      {team.name} ({team.department})
+                  <option value="">Select team leader (optional)</option>
+                  {teamLeaders.map((leader) => (
+                    <option key={leader.id} value={leader.id}>
+                      {leader.name} - {leader.employeeId} ({leader.designation})
                     </option>
                   ))}
                 </select>
-                {errors.team && (
-                  <p className="text-sm text-red-500 mt-1">{errors.team}</p>
-                )}
+                <p className="text-xs text-gray-600 mt-1">
+                  You can assign a team leader or leave it empty to assign later
+                </p>
+              </div>
+            </div>
+
+            {/* Team Members Section */}
+            <div className="mt-6">
+              <h3 className="text-lg font-medium text-gray-700 mb-3">
+                Assign Team Members
+              </h3>
+              
+              <div className="flex gap-3 mb-4">
+                <select
+                  value={selectedMember}
+                  onChange={(e) => setSelectedMember(e.target.value)}
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                >
+                  <option value="">Select a team member to add</option>
+                  {availableMembers.map((member) => (
+                    <option key={member.id} value={member.id}>
+                      {member.name} - {member.employeeId} ({member.designation})
+                    </option>
+                  ))}
+                </select>
+                <button
+                  type="button"
+                  onClick={handleAddMember}
+                  className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 whitespace-nowrap"
+                >
+                  Add Member
+                </button>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Project Manager <span className="text-red-500">*</span>
-                </label>
-                <select
-                  name="projectManager"
-                  value={formData.projectManager}
-                  onChange={handleChange}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white ${
-                    errors.projectManager ? 'border-red-500' : 'border-gray-300'
-                  }`}
-                >
-                  <option value="">Select project manager</option>
-                  {projectManagers.map((manager) => (
-                    <option key={manager} value={manager}>
-                      {manager}
-                    </option>
-                  ))}
-                </select>
-                {errors.projectManager && (
-                  <p className="text-sm text-red-500 mt-1">{errors.projectManager}</p>
-                )}
-              </div>
+              {formData.teamMembers.length > 0 && (
+                <div className="mt-4">
+                  <h4 className="text-sm font-medium text-gray-700 mb-2">
+                    Selected Team Members ({formData.teamMembers.length})
+                  </h4>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm border border-gray-200 rounded-md">
+                      <thead className="bg-gray-100">
+                        <tr>
+                          <th className="px-4 py-2 text-left font-semibold text-gray-700">Employee ID</th>
+                          <th className="px-4 py-2 text-left font-semibold text-gray-700">Name</th>
+                          <th className="px-4 py-2 text-left font-semibold text-gray-700">Designation</th>
+                          <th className="px-4 py-2 text-left font-semibold text-gray-700">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {formData.teamMembers.map((member) => (
+                          <tr key={member.id} className="border-t border-gray-200 hover:bg-gray-50">
+                            <td className="px-4 py-2">{member.employeeId}</td>
+                            <td className="px-4 py-2">{member.name}</td>
+                            <td className="px-4 py-2">{member.designation}</td>
+                            <td className="px-4 py-2">
+                              <button
+                                type="button"
+                                onClick={() => handleRemoveMember(member.id)}
+                                className="px-3 py-1 bg-red-500 text-white text-xs rounded hover:bg-red-600"
+                              >
+                                Remove
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+
+              {formData.teamMembers.length === 0 && (
+                <p className="text-sm text-gray-500 italic">No team members added yet</p>
+              )}
             </div>
           </div>
 
-          {/* Timeline & Budget */}
+          {/* Timeline & Priority */}
           <div className="bg-gray-50 rounded-lg p-6">
             <h2 className="text-xl font-medium text-gray-700 mb-4">
-              Timeline & Budget
+              Timeline & Priority
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -303,20 +580,6 @@ const CreateProject = () => {
                 {errors.endDate && (
                   <p className="text-sm text-red-500 mt-1">{errors.endDate}</p>
                 )}
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Budget (Optional)
-                </label>
-                <input
-                  type="number"
-                  name="budget"
-                  value={formData.budget}
-                  onChange={handleChange}
-                  placeholder="e.g., 50000"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
               </div>
 
               <div>

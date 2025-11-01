@@ -4,33 +4,30 @@ import { useNavigate } from 'react-router-dom';
 const AssignTask = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    project: '',
     taskTitle: '',
     taskDescription: '',
+    assignmentType: 'self', // self or others
     assignTo: '',
-    assignToType: 'individual', // individual or team
     priority: '',
     dueDate: '',
     taskType: 'oneTime', // oneTime or repetitive
     repetitiveType: '', // daily, weekly, monthly
     startDate: '',
     endDate: '',
-    reportedBy: '',
+    holidayInclusion: 'excluded', // included or excluded
   });
 
   const [errors, setErrors] = useState({});
 
   // Mock data - Replace with API calls
-  const projects = [
-    { id: 1, name: 'Mobile App Development', code: 'PROJ-2024-001', team: 'Engineering Team' },
-    { id: 2, name: 'Marketing Campaign Q1', code: 'PROJ-2024-002', team: 'Marketing Team' },
-    { id: 3, name: 'Sales Process Optimization', code: 'PROJ-2024-003', team: 'Sales Team' },
-    { id: 4, name: 'Customer Support Portal', code: 'PROJ-2023-015', team: 'Support Team' },
-    { id: 5, name: 'Financial System Upgrade', code: 'PROJ-2024-004', team: 'Finance Team' },
+  const usersAsPerHierarchy = [
+    { id: 1, name: 'John Doe', employeeId: 'EMP001', designation: 'CEO', level: 1 },
+    { id: 2, name: 'Jane Smith', employeeId: 'EMP002', designation: 'CTO', level: 2 },
+    { id: 3, name: 'Mike Johnson', employeeId: 'EMP003', designation: 'Team Leader', level: 3 },
+    { id: 4, name: 'Sarah Williams', employeeId: 'EMP004', designation: 'Senior Developer', level: 4 },
+    { id: 5, name: 'David Brown', employeeId: 'EMP005', designation: 'Junior Developer', level: 5 },
   ];
 
-  const users = ['John Doe', 'Jane Smith', 'Mike Johnson', 'Sarah Williams'];
-  const teams = ['Development Team', 'Marketing Team', 'Sales Team', 'Support Team'];
   const priorities = ['Low', 'Medium', 'High', 'Critical'];
 
   const handleChange = (e) => {
@@ -50,16 +47,13 @@ const AssignTask = () => {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.project) {
-      newErrors.project = 'Project selection is required';
-    }
     if (!formData.taskTitle.trim()) {
       newErrors.taskTitle = 'Task title is required';
     }
     if (!formData.taskDescription.trim()) {
       newErrors.taskDescription = 'Task description is required';
     }
-    if (!formData.assignTo) {
+    if (formData.assignmentType === 'others' && !formData.assignTo) {
       newErrors.assignTo = 'Please select who to assign this task to';
     }
     if (!formData.priority) {
@@ -68,8 +62,13 @@ const AssignTask = () => {
     if (!formData.dueDate) {
       newErrors.dueDate = 'Due date is required';
     }
-    if (formData.taskType === 'repetitive' && !formData.repetitiveType) {
-      newErrors.repetitiveType = 'Please select repetitive type';
+    if (formData.taskType === 'repetitive') {
+      if (!formData.repetitiveType) {
+        newErrors.repetitiveType = 'Please select repetitive type';
+      }
+      if (!formData.startDate) {
+        newErrors.startDate = 'Start date is required for repetitive tasks';
+      }
     }
 
     setErrors(newErrors);
@@ -87,18 +86,17 @@ const AssignTask = () => {
 
   const handleReset = () => {
     setFormData({
-      project: '',
       taskTitle: '',
       taskDescription: '',
+      assignmentType: 'self',
       assignTo: '',
-      assignToType: 'individual',
       priority: '',
       dueDate: '',
       taskType: 'oneTime',
       repetitiveType: '',
       startDate: '',
       endDate: '',
-      reportedBy: '',
+      holidayInclusion: 'excluded',
     });
     setErrors({});
   };
@@ -111,38 +109,72 @@ const AssignTask = () => {
         </h1>
 
         <div className="space-y-6">
-          {/* Project Selection */}
+          {/* Assignment Type Selection */}
           <div className="bg-blue-50 rounded-lg p-6 border border-blue-200">
             <h2 className="text-xl font-medium text-gray-700 mb-4">
-              Select Project
+              Task Assignment Type
             </h2>
             <div className="grid grid-cols-1 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Project <span className="text-red-500">*</span>
+                <label className="block text-sm font-medium text-gray-700 mb-3">
+                  Assign Task To <span className="text-red-500">*</span>
                 </label>
-                <select
-                  name="project"
-                  value={formData.project}
-                  onChange={handleChange}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white ${
-                    errors.project ? 'border-red-500' : 'border-gray-300'
-                  }`}
-                >
-                  <option value="">Select project</option>
-                  {projects.map((project) => (
-                    <option key={project.id} value={project.id}>
-                      {project.name} ({project.code}) - {project.team}
-                    </option>
-                  ))}
-                </select>
-                {errors.project && (
-                  <p className="text-sm text-red-500 mt-1">{errors.project}</p>
-                )}
-                <p className="text-xs text-gray-600 mt-1">
-                  Tasks must be assigned to a project. Select the project this task belongs to.
+                <div className="flex gap-6">
+                  <label className="flex items-center cursor-pointer">
+                    <input
+                      type="radio"
+                      name="assignmentType"
+                      value="self"
+                      checked={formData.assignmentType === 'self'}
+                      onChange={handleChange}
+                      className="mr-2 w-4 h-4"
+                    />
+                    <span className="text-sm font-medium text-gray-700">Self (Everyone)</span>
+                  </label>
+                  <label className="flex items-center cursor-pointer">
+                    <input
+                      type="radio"
+                      name="assignmentType"
+                      value="others"
+                      checked={formData.assignmentType === 'others'}
+                      onChange={handleChange}
+                      className="mr-2 w-4 h-4"
+                    />
+                    <span className="text-sm font-medium text-gray-700">Others (as per hierarchy)</span>
+                  </label>
+                </div>
+                <p className="text-xs text-gray-600 mt-2">
+                  {formData.assignmentType === 'self' 
+                    ? 'Task will be assigned to yourself' 
+                    : 'Assign task to team members based on organizational hierarchy'}
                 </p>
               </div>
+
+              {formData.assignmentType === 'others' && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Select User <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    name="assignTo"
+                    value={formData.assignTo}
+                    onChange={handleChange}
+                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white ${
+                      errors.assignTo ? 'border-red-500' : 'border-gray-300'
+                    }`}
+                  >
+                    <option value="">Select user from hierarchy</option>
+                    {usersAsPerHierarchy.map((user) => (
+                      <option key={user.id} value={user.id}>
+                        {user.name} - {user.designation} (Level {user.level})
+                      </option>
+                    ))}
+                  </select>
+                  {errors.assignTo && (
+                    <p className="text-sm text-red-500 mt-1">{errors.assignTo}</p>
+                  )}
+                </div>
+              )}
             </div>
           </div>
 
@@ -234,92 +266,6 @@ const AssignTask = () => {
             </div>
           </div>
 
-          {/* Assignment Details */}
-          <div className="bg-gray-50 rounded-lg p-6">
-            <h2 className="text-xl font-medium text-gray-700 mb-4">
-              Assignment Details
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Assign To Type <span className="text-red-500">*</span>
-                </label>
-                <div className="flex gap-4 mt-2">
-                  <label className="flex items-center">
-                    <input
-                      type="radio"
-                      name="assignToType"
-                      value="individual"
-                      checked={formData.assignToType === 'individual'}
-                      onChange={handleChange}
-                      className="mr-2"
-                    />
-                    <span className="text-sm text-gray-700">Individual</span>
-                  </label>
-                  <label className="flex items-center">
-                    <input
-                      type="radio"
-                      name="assignToType"
-                      value="team"
-                      checked={formData.assignToType === 'team'}
-                      onChange={handleChange}
-                      className="mr-2"
-                    />
-                    <span className="text-sm text-gray-700">Team</span>
-                  </label>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  {formData.assignToType === 'individual' ? 'Assign To User' : 'Assign To Team'}{' '}
-                  <span className="text-red-500">*</span>
-                </label>
-                <select
-                  name="assignTo"
-                  value={formData.assignTo}
-                  onChange={handleChange}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white ${
-                    errors.assignTo ? 'border-red-500' : 'border-gray-300'
-                  }`}
-                >
-                  <option value="">
-                    Select {formData.assignToType === 'individual' ? 'user' : 'team'}
-                  </option>
-                  {(formData.assignToType === 'individual' ? users : teams).map((item) => (
-                    <option key={item} value={item}>
-                      {item}
-                    </option>
-                  ))}
-                </select>
-                {errors.assignTo && (
-                  <p className="text-sm text-red-500 mt-1">{errors.assignTo}</p>
-                )}
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Assigned By (Task Creator/Manager)
-                </label>
-                <select
-                  name="reportedBy"
-                  value={formData.reportedBy}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-                >
-                  <option value="">Select who is assigning this task</option>
-                  {users.map((user) => (
-                    <option key={user} value={user}>
-                      {user}
-                    </option>
-                  ))}
-                </select>
-                <p className="text-xs text-gray-600 mt-1">
-                  The person creating/assigning this task (usually team leader or project manager)
-                </p>
-              </div>
-            </div>
-          </div>
 
           {/* Task Type */}
           <div className="bg-gray-50 rounded-lg p-6">
@@ -383,20 +329,25 @@ const AssignTask = () => {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Start Date
+                      Start Date <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="date"
                       name="startDate"
                       value={formData.startDate}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                        errors.startDate ? 'border-red-500' : 'border-gray-300'
+                      }`}
                     />
+                    {errors.startDate && (
+                      <p className="text-sm text-red-500 mt-1">{errors.startDate}</p>
+                    )}
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      End Date
+                      End Date (Optional)
                     </label>
                     <input
                       type="date"
@@ -405,9 +356,55 @@ const AssignTask = () => {
                       onChange={handleChange}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
+                    <p className="text-xs text-gray-600 mt-1">
+                      Leave empty for ongoing repetitive tasks
+                    </p>
                   </div>
                 </>
               )}
+            </div>
+          </div>
+
+          {/* Holiday Inclusion */}
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h2 className="text-xl font-medium text-gray-700 mb-4">
+              Holiday Settings
+            </h2>
+            <div className="grid grid-cols-1 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-3">
+                  Holiday Inclusion <span className="text-red-500">*</span>
+                </label>
+                <div className="flex gap-6">
+                  <label className="flex items-center cursor-pointer">
+                    <input
+                      type="radio"
+                      name="holidayInclusion"
+                      value="included"
+                      checked={formData.holidayInclusion === 'included'}
+                      onChange={handleChange}
+                      className="mr-2 w-4 h-4"
+                    />
+                    <span className="text-sm font-medium text-gray-700">Included</span>
+                  </label>
+                  <label className="flex items-center cursor-pointer">
+                    <input
+                      type="radio"
+                      name="holidayInclusion"
+                      value="excluded"
+                      checked={formData.holidayInclusion === 'excluded'}
+                      onChange={handleChange}
+                      className="mr-2 w-4 h-4"
+                    />
+                    <span className="text-sm font-medium text-gray-700">Excluded</span>
+                  </label>
+                </div>
+                <p className="text-xs text-gray-600 mt-2">
+                  {formData.holidayInclusion === 'included' 
+                    ? 'Task will be active on holidays' 
+                    : 'Task will be skipped on holidays'}
+                </p>
+              </div>
             </div>
           </div>
 

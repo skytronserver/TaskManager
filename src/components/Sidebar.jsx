@@ -92,10 +92,13 @@ const Sidebar = ({ open = true, mobileOpen = false, onMobileClose = () => {} }) 
 
   const [expandedCategories, setExpandedCategories] = useState({
     main: true,
-    Team: true,
+    Company: true,
+    Department: true,
+    Organization: true,
     CreateUsers: true,
-    Projects: true,
-    Tasks: true,
+    Assign: true,
+    Management: true,
+    MyWork: true,
     Alerts: true,
     Reports: true,
   });
@@ -199,33 +202,38 @@ const Sidebar = ({ open = true, mobileOpen = false, onMobileClose = () => {} }) 
           <Divider sx={{ my: 2, opacity: 0.5 }} />
         )}
 
+        {renderCategory('Company', menuItems.Company, 'Company')}
+        {filterMenuItems(menuItems.Company).length > 0 && (
+          <Divider sx={{ my: 2, opacity: 0.5 }} />
+        )}
+
+        {renderCategory('Department', menuItems.Department, 'Department')}
+        {filterMenuItems(menuItems.Department).length > 0 && (
+          <Divider sx={{ my: 2, opacity: 0.5 }} />
+        )}
+
         {renderCategory('Create Users', menuItems.CreateUsers, 'CreateUsers')}
         {filterMenuItems(menuItems.CreateUsers).length > 0 && (
           <Divider sx={{ my: 2, opacity: 0.5 }} />
         )}
 
-        {renderCategory('Team', menuItems.Team, 'Team')}
-        {filterMenuItems(menuItems.Team).length > 0 && (
+        {renderCategory('Organization', menuItems.Organization, 'Organization')}
+        {filterMenuItems(menuItems.Organization).length > 0 && (
           <Divider sx={{ my: 2, opacity: 0.5 }} />
         )}
 
-        {renderCategory('Projects', menuItems.Projects, 'Projects')}
-        {filterMenuItems(menuItems.Projects).length > 0 && (
+        {renderCategory('Assign', menuItems.Assign, 'Assign')}
+        {filterMenuItems(menuItems.Assign).length > 0 && (
           <Divider sx={{ my: 2, opacity: 0.5 }} />
         )}
 
-        {renderCategory('Tasks', menuItems.Tasks, 'Tasks')}
-        {filterMenuItems(menuItems.Tasks).length > 0 && (
+        {renderCategory('Management', menuItems.Management, 'Management')}
+        {filterMenuItems(menuItems.Management).length > 0 && (
           <Divider sx={{ my: 2, opacity: 0.5 }} />
         )}
 
-        {renderCategory('Alerts', menuItems.Alerts, 'Alerts')}
-        {filterMenuItems(menuItems.Alerts).length > 0 && (
-          <Divider sx={{ my: 2, opacity: 0.5 }} />
-        )}
-
-        {renderCategory('Reports', menuItems.Reports, 'Reports')}
-        {filterMenuItems(menuItems.Reports).length > 0 && (
+        {renderCategory('My Work', menuItems.MyWork, 'MyWork')}
+        {filterMenuItems(menuItems.MyWork).length > 0 && (
           <Divider sx={{ my: 2, opacity: 0.5 }} />
         )}
       </Box>

@@ -3,6 +3,9 @@ import Dashboard from './components/Dashboard'
 import CreateTeam from './pages/CreateTeam'
 import CreateTeamLeader from './pages/CreateTeamLeader'
 import CreateTeamMember from './pages/CreateTeamMember'
+import CreateUser from './pages/CreateUser'
+import CreateCompany from './pages/CreateCompany'
+import CreateDepartment from './pages/CreateDepartment'
 import CreateProject from './pages/CreateProject'
 import ProjectManagement from './pages/ProjectManagement'
 import TaskMethodology from './pages/TaskMethodology'
@@ -20,6 +23,9 @@ export default function AppRoutes() {
     <Routes>
       <Route path="/" element={<Dashboard />} />
       <Route path="/create-team" element={<CreateTeam />} />
+      <Route path="/create-company" element={<CreateCompany />} />
+      <Route path="/create-department" element={<CreateDepartment />} />
+      <Route path="/create-user" element={<CreateUser />} />
       <Route path="/create-team-leader" element={<CreateTeamLeader />} />
       <Route path="/create-team-member" element={<CreateTeamMember />} />
       <Route path="/create-project" element={<CreateProject />} />

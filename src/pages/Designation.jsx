@@ -3,6 +3,32 @@ import { useNavigate } from 'react-router-dom';
 
 const Designation = () => {
   const navigate = useNavigate();
+  
+  // Predefined designations to choose from
+  const availableDesignations = [
+    'CEO',
+    'CTO',
+    'CFO',
+    'COO',
+    'Team Leader',
+    'Senior Team Leader',
+    'Project Manager',
+    'Product Manager',
+    'Senior Developer',
+    'Junior Developer',
+    'Senior Designer',
+    'Junior Designer',
+    'Business Analyst',
+    'QA Engineer',
+    'DevOps Engineer',
+    'Sales Executive',
+    'Marketing Specialist',
+    'HR Coordinator',
+    'Financial Analyst',
+    'Operations Associate',
+    'Support Engineer',
+  ];
+
   const [designations, setDesignations] = useState([
     { id: 1, title: 'CEO', level: 1, reportsTo: null },
     { id: 2, title: 'CTO', level: 2, reportsTo: 'CEO' },
@@ -105,30 +131,37 @@ const Designation = () => {
     <div className="w-full max-w-7xl mx-auto">
       <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 md:p-8">
         <h1 className="text-2xl sm:text-3xl font-semibold text-blue-600 mb-4 sm:mb-6">
-          Designation Management
+          Organisational Hierarchy Management
         </h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Form Section */}
           <div className="bg-gray-50 rounded-lg p-6">
             <h2 className="text-xl font-medium text-gray-700 mb-4">
-              {isEditing ? 'Edit Designation' : 'Add New Designation'}
+              {isEditing ? 'Edit Designation' : 'Select Designation'}
             </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Designation Title <span className="text-red-500">*</span>
+                  Select Designation <span className="text-red-500">*</span>
                 </label>
-                <input
-                  type="text"
+                <select
                   name="title"
                   value={formData.title}
                   onChange={handleChange}
-                  placeholder="e.g., Senior Developer"
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white ${
                     errors.title ? 'border-red-500' : 'border-gray-300'
                   }`}
-                />
+                >
+                  <option value="">Choose a designation</option>
+                  {availableDesignations
+                    .filter(des => !designations.find(d => d.title === des))
+                    .map((designation) => (
+                      <option key={designation} value={designation}>
+                        {designation}
+                      </option>
+                    ))}
+                </select>
                 {errors.title && (
                   <p className="text-sm text-red-500 mt-1">{errors.title}</p>
                 )}
@@ -185,7 +218,7 @@ const Designation = () => {
                   type="submit"
                   className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
                 >
-                  {isEditing ? 'Update' : 'Add'} Designation
+                  {isEditing ? 'Update' : 'Add to'} Hierarchy
                 </button>
               </div>
             </form>
