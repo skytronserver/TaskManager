@@ -16,6 +16,7 @@ import AlertManagement from './pages/AlertManagement'
 import TaskManagement from './pages/TaskManagement'
 import Reports from './pages/Reports'
 import MyTasks from './pages/MyTasks'
+import IndividualTasks from './pages/IndividualTasks'
 import MemberQuery from './pages/MemberQuery'
 
 export default function AppRoutes() {
@@ -34,6 +35,7 @@ export default function AppRoutes() {
       <Route path="/designation" element={<Designation />} />
       <Route path="/assign-task" element={<AssignTask />} />
       <Route path="/my-tasks" element={<MyTasks />} />
+      <Route path="/individual-tasks" element={<IndividualTasks />} />
       <Route path="/member-query" element={<MemberQuery />} />
       <Route path="/query-reply" element={<QueryReply />} />
       <Route path="/alert-management" element={<AlertManagement />} />

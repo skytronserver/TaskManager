@@ -223,7 +223,7 @@ const CreateCompany = () => {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Registration Number
+                      GST Number
                     </label>
                     <input
                       type="text"
@@ -237,7 +237,7 @@ const CreateCompany = () => {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Tax ID
+                      PAN Number
                     </label>
                     <input
                       type="text"
@@ -276,7 +276,7 @@ const CreateCompany = () => {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Founded Date
+                      Date of Establishment
                     </label>
                     <input
                       type="date"
@@ -338,6 +338,25 @@ const CreateCompany = () => {
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="+1 (555) 123-4567"
                     />
+                  </div>
+
+                      <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Contact Person Name <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      name="companyName"
+                      value={formData.companyName}
+                      onChange={handleChange}
+                      required
+                      className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                        errors.companyName ? 'border-red-500' : 'border-gray-300'
+                      }`}
+                    />
+                    {errors.companyName && (
+                      <p className="text-sm text-red-500 mt-1">{errors.companyName}</p>
+                    )}
                   </div>
                 </div>
               </div>

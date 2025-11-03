@@ -26,8 +26,8 @@ export const menuItems = {
   ],
 
   Assign: [
-    { text: 'Task', icon: '📝', path: '/assign-task', roles: ['admin'] },
-    // { text: 'Project', icon: '📁', path: '/create-project', roles: ['admin'] },
+    { text: 'Individual Task', icon: '📝', path: '/assign-task', roles: ['admin'] },
+    { text: 'Project', icon: '📁', path: '/create-project', roles: ['admin'] },
    ],
 
    Management: [
@@ -35,11 +35,12 @@ export const menuItems = {
      { text: 'Project Management', icon: '📂', path: '/project-management', roles: ['admin'] },
   ],
 
-  // MyWork: [
-  //   { text: 'My Tasks', icon: '✅', path: '/my-tasks', roles: ['member'] },
-  //   { text: 'My Queries', icon: '💬', path: '/member-query', roles: ['member'] },
-  //   { text: 'Query & Reply', icon: '💬', path: '/query-reply', roles: ['admin', 'user'] },
-  // ],
+  MyWork: [
+    { text: 'My Tasks', icon: '✅', path: '/my-tasks', roles: ['member'] },
+    { text: 'Individual Tasks', icon: '🎯', path: '/individual-tasks', roles: ['member'] },
+    // { text: 'My Queries', icon: '💬', path: '/member-query', roles: ['member'] },
+    // { text: 'Query & Reply', icon: '💬', path: '/query-reply', roles: ['admin', 'user'] },
+  ],
 
   // Alerts: [
   //   { text: 'Alert Management', icon: '🔔', path: '/alert-management', roles: ['admin', 'user'] },

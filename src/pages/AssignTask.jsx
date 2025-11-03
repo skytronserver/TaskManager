@@ -129,7 +129,7 @@ const AssignTask = () => {
                       onChange={handleChange}
                       className="mr-2 w-4 h-4"
                     />
-                    <span className="text-sm font-medium text-gray-700">Self (Everyone)</span>
+                    <span className="text-sm font-medium text-gray-700">Self</span>
                   </label>
                   <label className="flex items-center cursor-pointer">
                     <input
@@ -140,7 +140,7 @@ const AssignTask = () => {
                       onChange={handleChange}
                       className="mr-2 w-4 h-4"
                     />
-                    <span className="text-sm font-medium text-gray-700">Others (as per hierarchy)</span>
+                    <span className="text-sm font-medium text-gray-700">Others</span>
                   </label>
                 </div>
                 <p className="text-xs text-gray-600 mt-2">
@@ -321,6 +321,7 @@ const AssignTask = () => {
                       <option value="daily">Daily</option>
                       <option value="weekly">Weekly</option>
                       <option value="monthly">Monthly</option>
+                      <option value="annually">Annually</option>
                     </select>
                     {errors.repetitiveType && (
                       <p className="text-sm text-red-500 mt-1">{errors.repetitiveType}</p>

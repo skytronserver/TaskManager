@@ -14,9 +14,11 @@ const ProjectManagement = () => {
       projectManager: 'Ankur',
       startDate: '2024-01-15',
       endDate: '2024-12-31',
+      deliverableDate: '2024-12-15',
       budget: 150000,
       priority: 'Critical',
-      status: 'in_progress',
+      status: 'live',
+      projectProgress: 'ongoing-ontime', // ongoing-ontime, ongoing-delayed, delayed
       progress: 65,
       tasksTotal: 45,
       tasksCompleted: 29,
@@ -32,9 +34,11 @@ const ProjectManagement = () => {
       projectManager: 'Ankur',
       startDate: '2024-02-01',
       endDate: '2024-11-30',
+      deliverableDate: '2024-11-20',
       budget: 200000,
       priority: 'Critical',
-      status: 'in_progress',
+      status: 'live',
+      projectProgress: 'ongoing-delayed',
       progress: 55,
       tasksTotal: 38,
       tasksCompleted: 21,
@@ -50,9 +54,11 @@ const ProjectManagement = () => {
       projectManager: 'Nitul',
       startDate: '2024-03-01',
       endDate: '2024-10-31',
+      deliverableDate: '2024-10-25',
       budget: 120000,
       priority: 'High',
-      status: 'in_progress',
+      status: 'live',
+      projectProgress: 'ongoing-ontime',
       progress: 70,
       tasksTotal: 32,
       tasksCompleted: 22,
@@ -68,9 +74,11 @@ const ProjectManagement = () => {
       projectManager: 'Nitul',
       startDate: '2024-02-15',
       endDate: '2024-09-30',
+      deliverableDate: null,
       budget: 100000,
       priority: 'High',
-      status: 'in_progress',
+      status: 'draft',
+      projectProgress: 'no-deliverable',
       progress: 60,
       tasksTotal: 28,
       tasksCompleted: 17,
@@ -86,9 +94,11 @@ const ProjectManagement = () => {
       projectManager: 'Nitul',
       startDate: '2024-04-01',
       endDate: '2024-12-31',
+      deliverableDate: null,
       budget: 180000,
       priority: 'High',
-      status: 'in_progress',
+      status: 'draft',
+      projectProgress: 'no-deliverable',
       progress: 45,
       tasksTotal: 40,
       tasksCompleted: 18,
@@ -104,9 +114,11 @@ const ProjectManagement = () => {
       projectManager: 'Ankur',
       startDate: '2024-01-10',
       endDate: '2024-12-31',
+      deliverableDate: '2024-12-20',
       budget: 250000,
       priority: 'Critical',
-      status: 'in_progress',
+      status: 'live',
+      projectProgress: 'ongoing-ontime',
       progress: 75,
       tasksTotal: 50,
       tasksCompleted: 38,
@@ -122,9 +134,11 @@ const ProjectManagement = () => {
       projectManager: 'Nitul',
       startDate: '2024-05-01',
       endDate: '2024-08-31',
+      deliverableDate: '2024-08-31',
       budget: 80000,
       priority: 'Medium',
-      status: 'in_progress',
+      status: 'closed',
+      projectProgress: 'closed',
       progress: 40,
       tasksTotal: 20,
       tasksCompleted: 8,
@@ -139,22 +153,18 @@ const ProjectManagement = () => {
 
   const getStatusColor = (status) => {
     const colors = {
-      planning: 'bg-gray-100 text-gray-700 border-gray-300',
-      in_progress: 'bg-blue-100 text-blue-700 border-blue-300',
-      on_hold: 'bg-yellow-100 text-yellow-700 border-yellow-300',
-      completed: 'bg-green-100 text-green-700 border-green-300',
-      cancelled: 'bg-red-100 text-red-700 border-red-300',
+      live: 'bg-green-100 text-green-700 border-green-300',
+      draft: 'bg-yellow-100 text-yellow-700 border-yellow-300',
+      closed: 'bg-gray-100 text-gray-700 border-gray-300',
     };
-    return colors[status] || colors.planning;
+    return colors[status] || colors.draft;
   };
 
   const getStatusLabel = (status) => {
     const labels = {
-      planning: 'Planning',
-      in_progress: 'In Progress',
-      on_hold: 'On Hold',
-      completed: 'Completed',
-      cancelled: 'Cancelled',
+      live: 'Live',
+      draft: 'Draft',
+      closed: 'Closed',
     };
     return labels[status] || status;
   };
@@ -167,6 +177,28 @@ const ProjectManagement = () => {
       Critical: 'text-red-600',
     };
     return colors[priority] || 'text-gray-600';
+  };
+
+  const getProjectProgressColor = (projectProgress) => {
+    const colors = {
+      'ongoing-ontime': 'bg-green-100 text-green-700 border-green-300',
+      'ongoing-delayed': 'bg-orange-100 text-orange-700 border-orange-300',
+      'delayed': 'bg-red-100 text-red-700 border-red-300',
+      'no-deliverable': 'bg-blue-100 text-blue-700 border-blue-300',
+      'closed': 'bg-gray-100 text-gray-700 border-gray-300',
+    };
+    return colors[projectProgress] || colors['no-deliverable'];
+  };
+
+  const getProjectProgressLabel = (projectProgress) => {
+    const labels = {
+      'ongoing-ontime': 'Ongoing - On Time',
+      'ongoing-delayed': 'Ongoing - Delayed',
+      'delayed': 'Delayed',
+      'no-deliverable': 'No Deliverable Date',
+      'closed': 'Closed',
+    };
+    return labels[projectProgress] || projectProgress;
   };
 
   const filteredProjects = projects.filter((project) => {
@@ -188,12 +220,6 @@ const ProjectManagement = () => {
     // Navigate to edit project page
   };
 
-  const handleDeleteProject = (projectId) => {
-    if (window.confirm('Are you sure you want to delete this project?')) {
-      console.log('Delete project:', projectId);
-      // Add API call to delete project
-    }
-  };
 
   return (
     <div className="w-full max-w-7xl mx-auto">
@@ -235,11 +261,9 @@ const ProjectManagement = () => {
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
               >
                 <option value="all">All Statuses</option>
-                <option value="planning">Planning</option>
-                <option value="in_progress">In Progress</option>
-                <option value="on_hold">On Hold</option>
-                <option value="completed">Completed</option>
-                <option value="cancelled">Cancelled</option>
+                <option value="live">Live</option>
+                <option value="draft">Draft</option>
+                <option value="closed">Closed</option>
               </select>
             </div>
           </div>
@@ -252,21 +276,21 @@ const ProjectManagement = () => {
             <p className="text-2xl font-bold text-blue-600">{projects.length}</p>
           </div>
           <div className="bg-green-50 rounded-lg p-4 border border-green-200">
-            <p className="text-sm text-gray-600 mb-1">In Progress</p>
+            <p className="text-sm text-gray-600 mb-1">Live</p>
             <p className="text-2xl font-bold text-green-600">
-              {projects.filter((p) => p.status === 'in_progress').length}
+              {projects.filter((p) => p.status === 'live').length}
             </p>
           </div>
           <div className="bg-yellow-50 rounded-lg p-4 border border-yellow-200">
-            <p className="text-sm text-gray-600 mb-1">Planning</p>
+            <p className="text-sm text-gray-600 mb-1">Draft</p>
             <p className="text-2xl font-bold text-yellow-600">
-              {projects.filter((p) => p.status === 'planning').length}
+              {projects.filter((p) => p.status === 'draft').length}
             </p>
           </div>
-          <div className="bg-purple-50 rounded-lg p-4 border border-purple-200">
-            <p className="text-sm text-gray-600 mb-1">Completed</p>
-            <p className="text-2xl font-bold text-purple-600">
-              {projects.filter((p) => p.status === 'completed').length}
+          <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+            <p className="text-sm text-gray-600 mb-1">Closed</p>
+            <p className="text-2xl font-bold text-gray-600">
+              {projects.filter((p) => p.status === 'closed').length}
             </p>
           </div>
         </div>
@@ -300,6 +324,13 @@ const ProjectManagement = () => {
                       >
                         {getStatusLabel(project.status)}
                       </span>
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs font-medium border ${getProjectProgressColor(
+                          project.projectProgress
+                        )}`}
+                      >
+                        {getProjectProgressLabel(project.projectProgress)}
+                      </span>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
@@ -326,9 +357,47 @@ const ProjectManagement = () => {
                         <span className="font-medium">{project.endDate}</span>
                       </div>
                       <div>
+                        <span className="text-gray-600">Deliverable:</span>{' '}
+                        <span className="font-medium">
+                          {project.deliverableDate || 'Not Set'}
+                        </span>
+                      </div>
+                      <div>
                         <span className="text-gray-600">Budget:</span>{' '}
                         <span className="font-medium">${project.budget.toLocaleString()}</span>
                       </div>
+                    </div>
+
+                    {/* Team Members Section */}
+                    <div className="mt-3 pt-3 border-t border-gray-200">
+                      <div className="mb-2">
+                        <span className="text-sm font-semibold text-gray-700">👥 Team Members:</span>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {project.teamMembers.split(' / ').map((member, index) => (
+                          <span
+                            key={index}
+                            className="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full border border-blue-200"
+                          >
+                            {member.trim()}
+                          </span>
+                        ))}
+                      </div>
+                      {project.appTeam && project.appTeam !== 'Not specified' && (
+                        <div className="mt-2">
+                          <span className="text-sm font-semibold text-gray-700">📱 App Team:</span>
+                          <div className="flex flex-wrap gap-2 mt-1">
+                            {project.appTeam.split(' / ').map((member, index) => (
+                              <span
+                                key={index}
+                                className="px-3 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded-full border border-purple-200"
+                              >
+                                {member.trim()}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
 
                     {/* Progress Bar */}
@@ -361,12 +430,6 @@ const ProjectManagement = () => {
                       className="flex-1 lg:flex-none px-4 py-2 bg-gray-600 text-white text-sm rounded hover:bg-gray-700 whitespace-nowrap"
                     >
                       Edit
-                    </button>
-                    <button
-                      onClick={() => handleDeleteProject(project.id)}
-                      className="flex-1 lg:flex-none px-4 py-2 bg-red-600 text-white text-sm rounded hover:bg-red-700 whitespace-nowrap"
-                    >
-                      Delete
                     </button>
                   </div>
                 </div>

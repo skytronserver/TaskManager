@@ -102,7 +102,7 @@ const Header = ({ onMenuClick, drawerWidth = 280 }) => {
             display: { xs: 'none', sm: 'block' },
           }}
         >
-          Task Manager
+          Pendulum
         </Typography>
 
         {/* Right Side - User Info */}

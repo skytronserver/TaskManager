@@ -1,68 +1,51 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const MyTasks = () => {
+const IndividualTasks = () => {
   const navigate = useNavigate();
   const currentUser = 'John Doe'; // This would come from auth context
 
-  // Mock projects data
-  const [projects] = useState([
+  const [tasks, setTasks] = useState([
     {
       id: 1,
-      name: 'SKYTRON BACK END',
-      code: 'PROJ-2024-001',
+      title: 'Complete Annual Training',
+      description: 'Complete mandatory annual compliance training modules',
+      assignedBy: 'HR Department',
+      priority: 'Medium',
+      dueDate: '2025-11-10',
+      status: 'pending',
+      type: 'oneTime',
+      startDate: '2025-11-01',
     },
     {
       id: 2,
-      name: 'Mobile App Development',
-      code: 'PROJ-2024-002',
+      title: 'Submit Timesheet',
+      description: 'Submit weekly timesheet for approval',
+      assignedBy: 'Admin',
+      priority: 'High',
+      dueDate: '2025-11-08',
+      status: 'in-progress',
+      type: 'repetitive',
+      startDate: '2025-11-04',
     },
     {
       id: 3,
-      name: 'Frontend Redesign',
-      code: 'PROJ-2024-003',
+      title: 'Performance Self-Assessment',
+      description: 'Complete quarterly performance self-assessment form',
+      assignedBy: 'Manager',
+      priority: 'High',
+      dueDate: '2025-11-15',
+      status: 'pending',
+      type: 'oneTime',
+      startDate: '2025-11-01',
     },
   ]);
-
-  // Load tasks from localStorage and filter by current user
-  const loadMyTasks = () => {
-    const savedTasks = localStorage.getItem('allTasks');
-    if (savedTasks) {
-      const allTasks = JSON.parse(savedTasks);
-      // Filter tasks assigned to current user
-      return allTasks.filter(task => task.assignedTo === currentUser);
-    }
-    return [];
-  };
-
-  const [tasks, setTasks] = useState(loadMyTasks());
-
-  // Reload tasks when component mounts or when localStorage changes
-  useEffect(() => {
-    const handleStorageChange = () => {
-      setTasks(loadMyTasks());
-    };
-
-    // Listen for storage changes
-    window.addEventListener('storage', handleStorageChange);
-    
-    // Also check for updates periodically (for same-tab updates)
-    const interval = setInterval(() => {
-      setTasks(loadMyTasks());
-    }, 1000);
-
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-      clearInterval(interval);
-    };
-  }, []);
 
   const [selectedTask, setSelectedTask] = useState(null);
   const [actionType, setActionType] = useState('');
   const [actionNote, setActionNote] = useState('');
   const [extensionDate, setExtensionDate] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
-  const [selectedProjectId, setSelectedProjectId] = useState('all');
 
   const handleTaskSelect = (task) => {
     setSelectedTask(task);
@@ -74,15 +57,11 @@ const MyTasks = () => {
   const handleStartTask = () => {
     if (!selectedTask) return;
     
-    // Update in localStorage
-    const allTasks = JSON.parse(localStorage.getItem('allTasks') || '[]');
-    const updatedAllTasks = allTasks.map((t) =>
-      t.id === selectedTask.id ? { ...t, status: 'in-progress' } : t
+    setTasks(
+      tasks.map((t) =>
+        t.id === selectedTask.id ? { ...t, status: 'in-progress' } : t
+      )
     );
-    localStorage.setItem('allTasks', JSON.stringify(updatedAllTasks));
-    
-    // Update local state
-    setTasks(loadMyTasks());
     alert('Task started successfully!');
     setSelectedTask({ ...selectedTask, status: 'in-progress' });
   };
@@ -90,15 +69,11 @@ const MyTasks = () => {
   const handleCompleteTask = () => {
     if (!selectedTask) return;
 
-    // Update in localStorage
-    const allTasks = JSON.parse(localStorage.getItem('allTasks') || '[]');
-    const updatedAllTasks = allTasks.map((t) =>
-      t.id === selectedTask.id ? { ...t, status: 'completed' } : t
+    setTasks(
+      tasks.map((t) =>
+        t.id === selectedTask.id ? { ...t, status: 'completed' } : t
+      )
     );
-    localStorage.setItem('allTasks', JSON.stringify(updatedAllTasks));
-    
-    // Update local state
-    setTasks(loadMyTasks());
     alert('Task marked as completed! Waiting for approval.');
     setSelectedTask(null);
   };
@@ -113,17 +88,13 @@ const MyTasks = () => {
       return;
     }
 
-    // Update in localStorage
-    const allTasks = JSON.parse(localStorage.getItem('allTasks') || '[]');
-    const updatedAllTasks = allTasks.map((t) =>
-      t.id === selectedTask.id
-        ? { ...t, status: 'extension-requested', dueDate: extensionDate }
-        : t
+    setTasks(
+      tasks.map((t) =>
+        t.id === selectedTask.id
+          ? { ...t, status: 'extension-requested', dueDate: extensionDate }
+          : t
+      )
     );
-    localStorage.setItem('allTasks', JSON.stringify(updatedAllTasks));
-    
-    // Update local state
-    setTasks(loadMyTasks());
     alert('Extension request submitted successfully!');
     setSelectedTask(null);
     setActionType('');
@@ -170,11 +141,8 @@ const MyTasks = () => {
     };
   };
 
-  const filteredTasks = tasks.filter((t) => {
-    const statusMatch = filterStatus === 'all' || t.status === filterStatus;
-    const projectMatch = selectedProjectId === 'all' || t.projectId === parseInt(selectedProjectId);
-    return statusMatch && projectMatch;
-  });
+  const filteredTasks =
+    filterStatus === 'all' ? tasks : tasks.filter((t) => t.status === filterStatus);
 
   const stats = getTaskStats();
 
@@ -183,8 +151,8 @@ const MyTasks = () => {
       <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 md:p-8">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6 gap-3">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-semibold text-blue-600">My Tasks</h1>
-            <p className="text-gray-600 mt-1">Assigned to: {currentUser}</p>
+            <h1 className="text-2xl sm:text-3xl font-semibold text-blue-600">Individual Tasks</h1>
+            <p className="text-gray-600 mt-1">Personal tasks not tied to any project • Assigned to: {currentUser}</p>
           </div>
         </div>
 
@@ -208,48 +176,29 @@ const MyTasks = () => {
           </div>
         </div>
 
-        {/* Filters */}
-        <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Filter by Project
-            </label>
-            <select
-              value={selectedProjectId}
-              onChange={(e) => setSelectedProjectId(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-            >
-              <option value="all">All Projects</option>
-              {projects.map((project) => (
-                <option key={project.id} value={project.id}>
-                  {project.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Filter by Status
-            </label>
-            <select
-              value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-            >
-              <option value="all">All Tasks</option>
-              <option value="pending">Pending</option>
-              <option value="in-progress">In Progress</option>
-              <option value="completed">Completed</option>
-              <option value="extension-requested">Extension Requested</option>
-            </select>
-          </div>
+        {/* Filter */}
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Filter by Status
+          </label>
+          <select
+            value={filterStatus}
+            onChange={(e) => setFilterStatus(e.target.value)}
+            className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+          >
+            <option value="all">All Tasks</option>
+            <option value="pending">Pending</option>
+            <option value="in-progress">In Progress</option>
+            <option value="completed">Completed</option>
+            <option value="extension-requested">Extension Requested</option>
+          </select>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Tasks List */}
           <div className="bg-gray-50 rounded-lg p-6">
             <h2 className="text-xl font-medium text-gray-700 mb-4 flex items-center">
-              My Tasks
+              Individual Tasks
               <span className="ml-2 bg-blue-500 text-white text-xs px-2 py-1 rounded-full">
                 {filteredTasks.length}
               </span>
@@ -282,8 +231,8 @@ const MyTasks = () => {
                       <span>📅 Due: {task.dueDate}</span>
                     </div>
                     <div className="mb-2">
-                      <span className="text-xs text-blue-600 font-medium">
-                        📁 {projects.find((p) => p.id === task.projectId)?.name || 'N/A'}
+                      <span className="text-xs text-purple-600 font-medium">
+                        🎯 Personal Task (No Project)
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
@@ -325,8 +274,12 @@ const MyTasks = () => {
                       </p>
                     </div>
                     <div>
-                      <span className="font-medium text-gray-600">Project:</span>
-                      <p className="text-gray-800">{projects.find((p) => p.id === selectedTask.projectId)?.name || 'N/A'}</p>
+                      <span className="font-medium text-gray-600">Type:</span>
+                      <p className="text-gray-800">
+                        <span className="inline-block px-2 py-1 bg-purple-100 text-purple-700 rounded text-xs">
+                          🎯 Individual Task (No Project)
+                        </span>
+                      </p>
                     </div>
                     <div>
                       <span className="font-medium text-gray-600">Assigned By:</span>
@@ -347,7 +300,7 @@ const MyTasks = () => {
                       <p className="text-gray-800">{selectedTask.dueDate}</p>
                     </div>
                     <div>
-                      <span className="font-medium text-gray-600">Type:</span>
+                      <span className="font-medium text-gray-600">Task Type:</span>
                       <p className="text-gray-800 capitalize">{selectedTask.type}</p>
                     </div>
                     <div>
@@ -474,4 +427,4 @@ const MyTasks = () => {
   );
 };
 
-export default MyTasks;
+export default IndividualTasks;
