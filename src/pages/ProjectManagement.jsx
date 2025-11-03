@@ -11,7 +11,7 @@ const ProjectManagement = () => {
       projectName: 'SKYTRON BACK END',
       projectCode: 'PROJ-2024-001',
       team: 'Engineering Team',
-      projectManager: 'Ankur',
+      teamLeader: 'Kishalay',
       startDate: '2024-01-15',
       endDate: '2024-12-31',
       deliverableDate: '2024-12-15',
@@ -31,7 +31,7 @@ const ProjectManagement = () => {
       projectName: 'DWARPAL AI',
       projectCode: 'PROJ-2024-002',
       team: 'AI Development Team',
-      projectManager: 'Ankur',
+      teamLeader: 'Kishalay',
       startDate: '2024-02-01',
       endDate: '2024-11-30',
       deliverableDate: '2024-11-20',
@@ -51,7 +51,7 @@ const ProjectManagement = () => {
       projectName: 'PENDULUM (Task Management App)',
       projectCode: 'PROJ-2024-003',
       team: 'Full Stack Team',
-      projectManager: 'Nitul',
+      teamLeader: 'Kishalay',
       startDate: '2024-03-01',
       endDate: '2024-10-31',
       deliverableDate: '2024-10-25',
@@ -71,7 +71,7 @@ const ProjectManagement = () => {
       projectName: 'ROUND THE CLOCK',
       projectCode: 'PROJ-2024-004',
       team: 'Full Stack Team',
-      projectManager: 'Nitul',
+      teamLeader: 'Kishalay',
       startDate: '2024-02-15',
       endDate: '2024-09-30',
       deliverableDate: null,
@@ -91,7 +91,7 @@ const ProjectManagement = () => {
       projectName: 'MAPWALA MIS',
       projectCode: 'PROJ-2024-005',
       team: 'Full Stack Team',
-      projectManager: 'Nitul',
+      teamLeader: 'Kishalay',
       startDate: '2024-04-01',
       endDate: '2024-12-31',
       deliverableDate: null,
@@ -111,7 +111,7 @@ const ProjectManagement = () => {
       projectName: 'MAPWALA / RAPIDYTARA / E-DISHA TRACKING PLATFORM',
       projectCode: 'PROJ-2024-006',
       team: 'Engineering Team',
-      projectManager: 'Ankur',
+      teamLeader: 'Kishalay',
       startDate: '2024-01-10',
       endDate: '2024-12-31',
       deliverableDate: '2024-12-20',
@@ -131,7 +131,7 @@ const ProjectManagement = () => {
       projectName: 'MINDGENIX & SKYTRACK WEBSITE',
       projectCode: 'PROJ-2024-007',
       team: 'Web Development Team',
-      projectManager: 'Nitul',
+      teamLeader: 'Kishalay',
       startDate: '2024-05-01',
       endDate: '2024-08-31',
       deliverableDate: '2024-08-31',
@@ -339,8 +339,8 @@ const ProjectManagement = () => {
                         <span className="font-medium">{project.team}</span>
                       </div>
                       <div>
-                        <span className="text-gray-600">Manager:</span>{' '}
-                        <span className="font-medium">{project.projectManager}</span>
+                        <span className="text-gray-600">Team Leader:</span>{' '}
+                        <span className="font-medium">{project.teamLeader}</span>
                       </div>
                       <div>
                         <span className="text-gray-600">Priority:</span>{' '}
