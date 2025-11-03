@@ -17,7 +17,7 @@ export const menuItems = {
 
 
   Organization: [
-    { text: 'Task Methodology', icon: '⚙️', path: '/task-methodology', roles: ['admin'] },
+    // { text: 'Task Methodology', icon: '⚙️', path: '/task-methodology', roles: ['admin'] },
     { text: 'Organisational Hierarchy', icon: '🎯', path: '/designation', roles: ['admin'] },
   ],
 
@@ -25,15 +25,15 @@ export const menuItems = {
     { text: 'Create User', icon: '👤', path: '/create-user', roles: ['admin'] },
   ],
 
-  // Assign: [
-  //   { text: 'Task', icon: '📝', path: '/assign-task', roles: ['admin'] },
-  //   { text: 'Project', icon: '📁', path: '/create-project', roles: ['admin'] },
-  // ],
+  Assign: [
+    { text: 'Task', icon: '📝', path: '/assign-task', roles: ['admin'] },
+    // { text: 'Project', icon: '📁', path: '/create-project', roles: ['admin'] },
+   ],
 
-  // Management: [
-  //   { text: 'Task Management', icon: '📋', path: '/task-management', roles: ['admin'] },
-  //   { text: 'Project Management', icon: '📂', path: '/project-management', roles: ['admin'] },
-  // ],
+   Management: [
+     { text: 'Task Management', icon: '📋', path: '/task-management', roles: ['admin'] },
+     { text: 'Project Management', icon: '📂', path: '/project-management', roles: ['admin'] },
+  ],
 
   // MyWork: [
   //   { text: 'My Tasks', icon: '✅', path: '/my-tasks', roles: ['member'] },
