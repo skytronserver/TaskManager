@@ -43,7 +43,7 @@ export const menuItems = {
   ],
 
   MyWork: [
-    { text: 'My Tasks', icon: '✅', path: '/my-tasks', roles: ['member'] },
+    { text: 'View Tasks', icon: '✅', path: '/my-tasks', roles: ['member'] },
     { text: 'Individual Tasks', icon: '🎯', path: '/individual-tasks', roles: ['member'] },
     // { text: 'My Queries', icon: '💬', path: '/member-query', roles: ['member'] },
     // { text: 'Query & Reply', icon: '💬', path: '/query-reply', roles: ['admin', 'user'] },

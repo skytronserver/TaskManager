@@ -117,14 +117,20 @@ const MyTasks = () => {
     const allTasks = JSON.parse(localStorage.getItem('allTasks') || '[]');
     const updatedAllTasks = allTasks.map((t) =>
       t.id === selectedTask.id
-        ? { ...t, status: 'extension-requested', dueDate: extensionDate }
+        ? { 
+            ...t, 
+            status: 'extension-requested',
+            requestedExtensionDate: extensionDate,
+            extensionReason: actionNote,
+            extensionRequestDate: new Date().toISOString()
+          }
         : t
     );
     localStorage.setItem('allTasks', JSON.stringify(updatedAllTasks));
     
     // Update local state
     setTasks(loadMyTasks());
-    alert('Extension request submitted successfully!');
+    alert('Extension request submitted successfully! Waiting for admin approval.');
     setSelectedTask(null);
     setActionType('');
     setActionNote('');

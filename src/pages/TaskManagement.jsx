@@ -80,6 +80,81 @@ const TaskManagement = () => {
         type: 'repetitive',
         projectId: 2,
       },
+      {
+        id: 4,
+        title: 'API Integration Testing',
+        description: 'Complete integration testing for payment gateway API',
+        assignedTo: 'John Doe',
+        assignedBy: 'Admin',
+        priority: 'High',
+        dueDate: '2025-11-08',
+        status: 'extension-requested',
+        type: 'oneTime',
+        projectId: 1,
+        requestedExtensionDate: '2025-11-15',
+        extensionReason: 'Need additional time to test edge cases and handle error scenarios. Payment gateway documentation was incomplete.',
+        extensionRequestDate: '2025-11-04T10:30:00Z',
+      },
+      {
+        id: 5,
+        title: 'Code Review - Authentication Module',
+        description: 'Review and provide feedback on the new authentication implementation',
+        assignedTo: 'John Doe',
+        assignedBy: 'Team Leader',
+        priority: 'Medium',
+        dueDate: '2025-11-06',
+        status: 'pending',
+        type: 'oneTime',
+        projectId: 1,
+      },
+      {
+        id: 6,
+        title: 'Fix Bug - Login Page Redirect',
+        description: 'Users are not being redirected properly after login. Fix the routing issue.',
+        assignedTo: 'John Doe',
+        assignedBy: 'Admin',
+        priority: 'Critical',
+        dueDate: '2025-11-05',
+        status: 'in-progress',
+        type: 'oneTime',
+        projectId: 1,
+      },
+      {
+        id: 7,
+        title: 'Update Documentation',
+        description: 'Update API documentation with new endpoints and examples',
+        assignedTo: 'John Doe',
+        assignedBy: 'Team Leader',
+        priority: 'Low',
+        dueDate: '2025-11-12',
+        status: 'pending',
+        type: 'oneTime',
+        projectId: 1,
+      },
+      {
+        id: 8,
+        title: 'Performance Optimization',
+        description: 'Optimize database queries for the user dashboard to improve load time',
+        assignedTo: 'John Doe',
+        assignedBy: 'Admin',
+        priority: 'High',
+        dueDate: '2025-11-10',
+        status: 'in-progress',
+        type: 'oneTime',
+        projectId: 1,
+      },
+      {
+        id: 9,
+        title: 'Setup CI/CD Pipeline',
+        description: 'Configure automated testing and deployment pipeline',
+        assignedTo: 'John Doe',
+        assignedBy: 'Admin',
+        priority: 'Medium',
+        dueDate: '2025-11-20',
+        status: 'pending',
+        type: 'oneTime',
+        projectId: 2,
+      },
     ];
   };
 
@@ -111,7 +186,8 @@ const TaskManagement = () => {
     setSelectedTask(task);
     setActionType('');
     setActionNote('');
-    setExtensionDate('');
+    // Pre-fill extension date if there's a request
+    setExtensionDate(task.requestedExtensionDate || '');
     setReassignTo('');
   };
 
@@ -127,7 +203,7 @@ const TaskManagement = () => {
       return;
     }
 
-    if (actionType === 'approve-extension' && !extensionDate) {
+    if ((actionType === 'approve-extension' || actionType === 'grant-extension') && !extensionDate) {
       alert('Please select an extension date');
       return;
     }
@@ -152,6 +228,10 @@ const TaskManagement = () => {
       case 'approve-extension':
         newStatus = 'in-progress';
         actionMessage = 'Extension approved successfully!';
+        break;
+      case 'grant-extension':
+        newStatus = 'extended';
+        actionMessage = 'Extension granted successfully!';
         break;
       case 'reject-extension':
         newStatus = 'in-progress';
@@ -180,9 +260,17 @@ const TaskManagement = () => {
     const updatedTask = {
       ...selectedTask,
       status: newStatus,
-      ...(actionType === 'approve-extension' && { dueDate: extensionDate }),
+      ...((actionType === 'approve-extension' || actionType === 'grant-extension') && { 
+        dueDate: extensionDate || selectedTask.requestedExtensionDate 
+      }),
       ...(actionType === 'reassign' && { assignedTo: reassignTo }),
       ...(actionNote && { remarks: actionNote, remarksDate: new Date().toISOString() }),
+      // Clear extension request data after processing
+      ...((actionType === 'approve-extension' || actionType === 'reject-extension') && {
+        requestedExtensionDate: undefined,
+        extensionReason: undefined,
+        extensionRequestDate: undefined
+      }),
     };
 
     setTasks(
@@ -210,6 +298,8 @@ const TaskManagement = () => {
       case 'approved':
         return 'bg-purple-100 text-purple-700 border-purple-300';
       case 'extended':
+        return 'bg-orange-100 text-orange-700 border-orange-300';
+      case 'extension-requested':
         return 'bg-orange-100 text-orange-700 border-orange-300';
       case 'abandoned':
         return 'bg-red-100 text-red-700 border-red-300';
@@ -322,6 +412,7 @@ const TaskManagement = () => {
                 <option value="all">All Tasks</option>
                 <option value="pending">Pending</option>
                 <option value="in-progress">In Progress</option>
+                <option value="extension-requested">⏰ Extension Requested</option>
                 <option value="completed">Completed</option>
                 <option value="approved">Approved</option>
                 <option value="extended">Extended</option>
@@ -559,6 +650,28 @@ const TaskManagement = () => {
                         {selectedTask.status.replace('-', ' ').toUpperCase()}
                       </span>
                     </div>
+                    {selectedTask.status === 'extension-requested' && selectedTask.extensionReason && (
+                      <div className="mt-3 pt-3 border-t border-gray-200">
+                        <span className="font-medium text-gray-600">📋 Extension Request:</span>
+                        <div className="mt-2 bg-orange-50 border border-orange-200 rounded-lg p-3">
+                          <div className="space-y-2">
+                            <div>
+                              <span className="text-xs font-medium text-gray-600">Requested Date:</span>
+                              <p className="text-sm font-semibold text-orange-700">{selectedTask.requestedExtensionDate}</p>
+                            </div>
+                            <div>
+                              <span className="text-xs font-medium text-gray-600">Reason:</span>
+                              <p className="text-sm text-gray-800">{selectedTask.extensionReason}</p>
+                            </div>
+                            {selectedTask.extensionRequestDate && (
+                              <p className="text-xs text-gray-500">
+                                Requested on: {new Date(selectedTask.extensionRequestDate).toLocaleString()}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    )}
                     {selectedTask.remarks && (
                       <div className="mt-3 pt-3 border-t border-gray-200">
                         <span className="font-medium text-gray-600">Admin Remarks:</span>
@@ -600,6 +713,7 @@ const TaskManagement = () => {
                       )}
                       {(selectedTask.status === 'pending' || selectedTask.status === 'in-progress') && (
                         <>
+                          <option value="grant-extension">⏰ Grant Extension</option>
                           <option value="abandon">Abandon Task</option>
                           <option value="completed">Mark as Completed</option>
                         </>
@@ -611,7 +725,7 @@ const TaskManagement = () => {
 
                   {(actionType === 'approve-extension' || actionType === 'reject-extension' || 
                     actionType === 'approve-closure' || actionType === 'reject-closure' || 
-                    actionType === 'abandon' || actionType === 'reassign') && (
+                    actionType === 'abandon' || actionType === 'reassign' || actionType === 'grant-extension') && (
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Remarks {(actionType === 'reject-closure' || actionType === 'reject-extension' || actionType === 'abandon' || actionType === 'reassign') && <span className="text-red-500">*</span>}
@@ -625,6 +739,7 @@ const TaskManagement = () => {
                           actionType === 'reject-closure' ? 'Explain why closure is rejected...' :
                           actionType === 'approve-extension' ? 'Add approval remarks (optional)...' :
                           actionType === 'reject-extension' ? 'Explain why extension is rejected...' :
+                          actionType === 'grant-extension' ? 'Reason for granting extension (optional)...' :
                           actionType === 'reassign' ? 'Explain why task is being reassigned...' :
                           'Provide a reason...'
                         }
@@ -633,7 +748,7 @@ const TaskManagement = () => {
                     </div>
                   )}
 
-                  {actionType === 'approve-extension' && (
+                  {(actionType === 'approve-extension' || actionType === 'grant-extension') && (
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         New Due Date <span className="text-red-500">*</span>
