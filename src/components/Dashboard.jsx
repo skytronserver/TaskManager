@@ -14,22 +14,22 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-slate-800">Dashboard</h1>
-        <p className="text-slate-600 mt-2">Welcome back! Here's what's happening today.</p>
+        <h1 className="text-2xl sm:text-3xl font-bold text-slate-800">Dashboard</h1>
+        <p className="text-sm sm:text-base text-slate-600 mt-2">Welcome back! Here's what's happening today.</p>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
         {stats.map((stat, index) => (
-          <div key={index} className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+          <div key={index} className="bg-white rounded-lg shadow-md p-4 sm:p-6 hover:shadow-lg transition-shadow">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-slate-600 font-medium">{stat.label}</p>
-                <p className="text-3xl font-bold text-slate-800 mt-2">{stat.value}</p>
+                <p className="text-xs sm:text-sm text-slate-600 font-medium">{stat.label}</p>
+                <p className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-800 mt-1 sm:mt-2">{stat.value}</p>
               </div>
-              <div className={`${stat.color} w-12 h-12 rounded-lg flex items-center justify-center text-2xl`}>
+              <div className={`${stat.color} w-10 h-10 sm:w-12 sm:h-12 rounded-lg flex items-center justify-center text-xl sm:text-2xl`}>
                 {stat.icon}
               </div>
             </div>
@@ -38,19 +38,19 @@ const Dashboard = () => {
       </div>
 
       {/* Recent Activity */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-xl font-bold text-slate-800 mb-4">Recent Activity</h2>
-        <div className="space-y-4">
+      <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
+        <h2 className="text-lg sm:text-xl font-bold text-slate-800 mb-4">Recent Activity</h2>
+        <div className="space-y-3 sm:space-y-4">
           {recentActivities.map((activity, index) => (
-            <div key={index} className="flex items-center gap-4 p-4 hover:bg-slate-50 rounded-lg transition-colors">
-              <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-semibold">
+            <div key={index} className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 hover:bg-slate-50 rounded-lg transition-colors">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-semibold text-sm sm:text-base flex-shrink-0">
                 {activity.user.charAt(0)}
               </div>
-              <div className="flex-1">
-                <p className="text-slate-800 font-medium">{activity.user}</p>
-                <p className="text-sm text-slate-600">{activity.action}</p>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm sm:text-base text-slate-800 font-medium truncate">{activity.user}</p>
+                <p className="text-xs sm:text-sm text-slate-600 truncate">{activity.action}</p>
               </div>
-              <span className="text-sm text-slate-500">{activity.time}</span>
+              <span className="text-xs sm:text-sm text-slate-500 whitespace-nowrap">{activity.time}</span>
             </div>
           ))}
         </div>

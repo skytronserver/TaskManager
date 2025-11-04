@@ -429,7 +429,7 @@ const TaskManagement = () => {
                 />
               </div>
 
-              <div className="md:col-span-2 flex justify-end gap-3">
+              <div className="md:col-span-2 flex flex-col sm:flex-row justify-end gap-3">
                 <button
                   onClick={() => {
                     setShowCreateTask(false);
@@ -442,13 +442,13 @@ const TaskManagement = () => {
                       projectId: '',
                     });
                   }}
-                  className="px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100"
+                  className="w-full sm:w-auto px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleCreateTask}
-                  className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                  className="w-full sm:w-auto px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
                 >
                   Create Task
                 </button>
@@ -480,21 +480,21 @@ const TaskManagement = () => {
                         : 'border-gray-200'
                     }`}
                   >
-                    <div className="flex justify-between items-start mb-2">
-                      <h3 className="font-semibold text-gray-800">{task.title}</h3>
-                      <span className={`text-xs font-semibold ${getPriorityColor(task.priority)}`}>
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2 gap-1 sm:gap-0">
+                      <h3 className="font-semibold text-gray-800 text-sm sm:text-base">{task.title}</h3>
+                      <span className={`text-xs font-semibold ${getPriorityColor(task.priority)} w-fit`}>
                         {task.priority}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                    <p className="text-xs sm:text-sm text-gray-600 mb-3 line-clamp-2">
                       {task.description}
                     </p>
-                    <div className="flex items-center justify-between text-xs text-gray-600 mb-2">
-                      <span>👤 {task.assignedTo}</span>
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between text-xs text-gray-600 mb-2 gap-1 sm:gap-0">
+                      <span className="truncate">👤 {task.assignedTo}</span>
                       <span>📅 {task.dueDate}</span>
                     </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs text-blue-600 font-medium">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0">
+                      <span className="text-xs text-blue-600 font-medium truncate">
                         📁 {projects.find((p) => p.id === task.projectId)?.name || 'N/A'}
                       </span>
                       <span
@@ -671,7 +671,7 @@ const TaskManagement = () => {
                     </div>
                   )}
 
-                  <div className="flex gap-3 pt-2">
+                  <div className="flex flex-col sm:flex-row gap-3 pt-2">
                     <button
                       onClick={() => {
                         setSelectedTask(null);
@@ -703,7 +703,14 @@ const TaskManagement = () => {
           </div>
         </div>
 
-        <div className="flex gap-4 justify-end mt-8">
+        <div className="flex flex-col sm:flex-row gap-4 justify-end mt-8">
+          <button
+            type="button"
+            onClick={() => navigate('/task-chat')}
+            className="px-6 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 flex items-center justify-center gap-2"
+          >
+            💬 Task Chat
+          </button>
           <button
             type="button"
             onClick={() => navigate('/')}

@@ -438,8 +438,14 @@ const ProjectManagement = () => {
           )}
         </div>
 
-        {/* Back Button */}
-        <div className="flex justify-end mt-6">
+        {/* Action Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-end mt-6">
+          <button
+            onClick={() => navigate('/project-chat')}
+            className="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 flex items-center justify-center gap-2"
+          >
+            👥 Project Group Chat
+          </button>
           <button
             onClick={() => navigate('/')}
             className="px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100"

@@ -23,8 +23,10 @@ function App() {
         />
         
         {/* Main Content */}
-        <main className="flex-1 w-full md:ml-0 p-3 sm:p-4 md:p-6 lg:p-8 overflow-x-hidden">
-          <AppRoutes />
+        <main className="flex-1 w-full p-3 sm:p-4 md:p-6 lg:p-8 overflow-x-hidden transition-all duration-300" style={{ marginLeft: 0 }}>
+          <div className="max-w-full">
+            <AppRoutes />
+          </div>
         </main>
       </div>
     </div>

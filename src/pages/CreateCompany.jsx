@@ -193,7 +193,7 @@ const CreateCompany = () => {
                       className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                         errors.companyName ? 'border-red-500' : 'border-gray-300'
                       }`}
-                      placeholder="e.g., Tech Solutions Inc."
+                    
                     />
                     {errors.companyName && (
                       <p className="text-sm text-red-500 mt-1">{errors.companyName}</p>
@@ -214,7 +214,7 @@ const CreateCompany = () => {
                       className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                         errors.companyCode ? 'border-red-500' : 'border-gray-300'
                       }`}
-                      placeholder="e.g., TSI"
+                     
                     />
                     {errors.companyCode && (
                       <p className="text-sm text-red-500 mt-1">{errors.companyCode}</p>
@@ -231,7 +231,6 @@ const CreateCompany = () => {
                       value={formData.registrationNumber}
                       onChange={handleChange}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="e.g., REG123456"
                     />
                   </div>
 
@@ -245,7 +244,7 @@ const CreateCompany = () => {
                       value={formData.taxId}
                       onChange={handleChange}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="e.g., TAX123456"
+                     
                     />
                   </div>
 
@@ -336,7 +335,7 @@ const CreateCompany = () => {
                       value={formData.phone}
                       onChange={handleChange}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="+1 (555) 123-4567"
+                      placeholder="+91 9101033202"
                     />
                   </div>
 
@@ -421,7 +420,7 @@ const CreateCompany = () => {
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Zip Code
+                        Pin Code
                       </label>
                       <input
                         type="text"

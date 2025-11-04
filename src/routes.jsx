@@ -18,6 +18,10 @@ import Reports from './pages/Reports'
 import MyTasks from './pages/MyTasks'
 import IndividualTasks from './pages/IndividualTasks'
 import MemberQuery from './pages/MemberQuery'
+import UserManagement from './pages/UserManagement'
+import HolidayCalendar from './pages/HolidayCalendar'
+import ProjectChat from './pages/ProjectChat'
+import TaskChat from './pages/TaskChat'
 
 export default function AppRoutes() {
   return (
@@ -41,6 +45,10 @@ export default function AppRoutes() {
       <Route path="/alert-management" element={<AlertManagement />} />
       <Route path="/task-management" element={<TaskManagement />} />
       <Route path="/reports" element={<Reports />} />
+      <Route path="/user-management" element={<UserManagement />} />
+      <Route path="/holiday-calendar" element={<HolidayCalendar />} />
+      <Route path="/project-chat" element={<ProjectChat />} />
+      <Route path="/task-chat" element={<TaskChat />} />
       <Route
         path="/users"
         element={

@@ -99,7 +99,8 @@ const Header = ({ onMenuClick, drawerWidth = 280 }) => {
             flexGrow: 1,
             color: '#ffffff',
             fontWeight: 600,
-            display: { xs: 'none', sm: 'block' },
+            fontSize: { xs: '1rem', sm: '1.25rem' },
+            display: 'block',
           }}
         >
           Pendulum

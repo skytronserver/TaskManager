@@ -98,6 +98,7 @@ const Sidebar = ({ open = true, mobileOpen = false, onMobileClose = () => {} }) 
     CreateUsers: true,
     Assign: true,
     Management: true,
+    Communication: true,
     MyWork: true,
     Alerts: true,
     Reports: true,
@@ -229,6 +230,11 @@ const Sidebar = ({ open = true, mobileOpen = false, onMobileClose = () => {} }) 
 
         {renderCategory('Management', menuItems.Management, 'Management')}
         {filterMenuItems(menuItems.Management).length > 0 && (
+          <Divider sx={{ my: 2, opacity: 0.5 }} />
+        )}
+
+        {renderCategory('Communication', menuItems.Communication, 'Communication')}
+        {filterMenuItems(menuItems.Communication).length > 0 && (
           <Divider sx={{ my: 2, opacity: 0.5 }} />
         )}
 

@@ -33,6 +33,13 @@ export const menuItems = {
    Management: [
      { text: 'Task Management', icon: '📋', path: '/task-management', roles: ['admin'] },
      { text: 'Project Management', icon: '📂', path: '/project-management', roles: ['admin'] },
+     { text: 'User Management', icon: '👥', path: '/user-management', roles: ['admin'] },
+     { text: 'Holiday Calendar', icon: '📅', path: '/holiday-calendar', roles: ['admin'] },
+  ],
+
+  Communication: [
+    { text: 'Project Group Chat', icon: '👥', path: '/project-chat', roles: ['admin', 'user'] },
+    { text: 'Task Chat', icon: '💬', path: '/task-chat', roles: ['admin', 'user'] },
   ],
 
   MyWork: [
