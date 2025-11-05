@@ -4,7 +4,10 @@ const Chat = ({ chatId, chatType, chatTitle, currentUser = 'Admin' }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [filePreview, setFilePreview] = useState(null);
   const messagesEndRef = useRef(null);
+  const fileInputRef = useRef(null);
 
   // Load messages from localStorage
   useEffect(() => {
@@ -34,19 +37,27 @@ const Chat = ({ chatId, chatType, chatTitle, currentUser = 'Admin' }) => {
 
   const handleSendMessage = (e) => {
     e.preventDefault();
-    if (!newMessage.trim()) return;
+    if (!newMessage.trim() && !selectedFile) return;
 
     const message = {
       id: Date.now(),
       sender: currentUser,
       text: newMessage.trim(),
       timestamp: new Date().toISOString(),
-      type: 'text',
+      type: selectedFile ? 'file' : 'text',
+      file: selectedFile ? {
+        name: selectedFile.name,
+        size: selectedFile.size,
+        type: selectedFile.type,
+        data: filePreview,
+      } : null,
     };
 
     setMessages([...messages, message]);
     setNewMessage('');
     setIsTyping(false);
+    setSelectedFile(null);
+    setFilePreview(null);
   };
 
   const handleTyping = (e) => {
@@ -107,6 +118,67 @@ const Chat = ({ chatId, chatType, chatTitle, currentUser = 'Admin' }) => {
     if (window.confirm('Are you sure you want to delete this message?')) {
       setMessages(messages.filter((msg) => msg.id !== messageId));
     }
+  };
+
+  const handleFileSelect = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Validate file size (max 10MB)
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    if (file.size > maxSize) {
+      alert('File size must be less than 10MB');
+      return;
+    }
+
+    setSelectedFile(file);
+
+    // Create preview for images
+    if (file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFilePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setFilePreview(null);
+    }
+  };
+
+  const handleRemoveFile = () => {
+    setSelectedFile(null);
+    setFilePreview(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const getFileIcon = (fileType) => {
+    if (fileType.startsWith('image/')) return '🖼️';
+    if (fileType.startsWith('video/')) return '🎥';
+    if (fileType.startsWith('audio/')) return '🎵';
+    if (fileType.includes('pdf')) return '📄';
+    if (fileType.includes('word') || fileType.includes('document')) return '📝';
+    if (fileType.includes('excel') || fileType.includes('spreadsheet')) return '📊';
+    if (fileType.includes('zip') || fileType.includes('rar')) return '📦';
+    return '📎';
+  };
+
+  const formatFileSize = (bytes) => {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+  };
+
+  const handleDownloadFile = (file) => {
+    const link = document.createElement('a');
+    link.href = file.data;
+    link.download = file.name;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
@@ -179,9 +251,67 @@ const Chat = ({ chatId, chatType, chatTitle, currentUser = 'Admin' }) => {
                           : 'bg-white text-gray-800 border border-gray-200 rounded-bl-sm'
                       }`}
                     >
-                      <p className="text-sm break-words whitespace-pre-wrap">
-                        {message.text}
-                      </p>
+                      {/* File Message */}
+                      {message.type === 'file' && message.file && (
+                        <div className="mb-2">
+                          {message.file.type.startsWith('image/') ? (
+                            <div className="mb-2">
+                              <img
+                                src={message.file.data}
+                                alt={message.file.name}
+                                className="max-w-full max-h-64 rounded-lg cursor-pointer"
+                                onClick={() => window.open(message.file.data, '_blank')}
+                              />
+                            </div>
+                          ) : (
+                            <div
+                              className={`flex items-center gap-2 p-3 rounded-lg ${
+                                isCurrentUser
+                                  ? 'bg-blue-500'
+                                  : 'bg-gray-100'
+                              }`}
+                            >
+                              <span className="text-2xl">
+                                {getFileIcon(message.file.type)}
+                              </span>
+                              <div className="flex-1 min-w-0">
+                                <p
+                                  className={`text-sm font-medium truncate ${
+                                    isCurrentUser ? 'text-white' : 'text-gray-800'
+                                  }`}
+                                >
+                                  {message.file.name}
+                                </p>
+                                <p
+                                  className={`text-xs ${
+                                    isCurrentUser ? 'text-blue-100' : 'text-gray-500'
+                                  }`}
+                                >
+                                  {formatFileSize(message.file.size)}
+                                </p>
+                              </div>
+                              <button
+                                onClick={() => handleDownloadFile(message.file)}
+                                className={`text-sm px-2 py-1 rounded ${
+                                  isCurrentUser
+                                    ? 'bg-blue-700 hover:bg-blue-800 text-white'
+                                    : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
+                                }`}
+                              >
+                                ⬇️
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Text Message */}
+                      {message.text && (
+                        <p className="text-sm break-words whitespace-pre-wrap">
+                          {message.text}
+                        </p>
+                      )}
+
                       <div className="flex items-center justify-between gap-2 mt-1">
                         <span
                           className={`text-xs ${
@@ -234,6 +364,42 @@ const Chat = ({ chatId, chatType, chatTitle, currentUser = 'Admin' }) => {
         onSubmit={handleSendMessage}
         className="p-4 bg-white border-t border-gray-200"
       >
+        {/* File Preview */}
+        {selectedFile && (
+          <div className="mb-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3 flex-1 min-w-0">
+                {filePreview ? (
+                  <img
+                    src={filePreview}
+                    alt="Preview"
+                    className="w-12 h-12 object-cover rounded"
+                  />
+                ) : (
+                  <span className="text-3xl">
+                    {getFileIcon(selectedFile.type)}
+                  </span>
+                )}
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-gray-800 truncate">
+                    {selectedFile.name}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {formatFileSize(selectedFile.size)}
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={handleRemoveFile}
+                className="text-red-500 hover:text-red-700 text-sm px-2 py-1"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+        )}
+
         <div className="flex gap-2">
           <input
             type="text"
@@ -242,11 +408,29 @@ const Chat = ({ chatId, chatType, chatTitle, currentUser = 'Admin' }) => {
             placeholder="Type your message..."
             className="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
           />
+          
+          {/* File Upload Button */}
+          <input
+            ref={fileInputRef}
+            type="file"
+            onChange={handleFileSelect}
+            className="hidden"
+            accept="*/*"
+          />
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            className="px-3 py-2 border border-gray-300 text-gray-600 rounded-full hover:bg-gray-50 transition-all"
+            title="Attach file"
+          >
+            📎
+          </button>
+
           <button
             type="submit"
-            disabled={!newMessage.trim()}
+            disabled={!newMessage.trim() && !selectedFile}
             className={`px-6 py-2 rounded-full font-medium text-sm transition-all ${
-              newMessage.trim()
+              newMessage.trim() || selectedFile
                 ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-md hover:shadow-lg'
                 : 'bg-gray-200 text-gray-400 cursor-not-allowed'
             }`}

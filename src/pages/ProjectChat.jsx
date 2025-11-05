@@ -13,24 +13,53 @@ const ProjectChat = () => {
       code: 'PROJ-2024-001',
       teamMembers: ['Ankur', 'Nitul', 'Kishalay'],
       status: 'active',
+      description: 'Backend development for SKYTRON platform',
+      startDate: '2024-01-15',
     },
     {
       id: 2,
       name: 'Mobile App Development',
       code: 'PROJ-2024-002',
       teamMembers: ['Kajal', 'Samudra'],
-      status: 'active',
+      status: 'in-progress',
+      description: 'Cross-platform mobile application development',
+      startDate: '2024-02-01',
     },
     {
       id: 3,
       name: 'Frontend Redesign',
       code: 'PROJ-2024-003',
       teamMembers: ['Twinkle', 'Nitul'],
-      status: 'active',
+      status: 'completed',
+      description: 'UI/UX redesign for the main application',
+      startDate: '2024-01-10',
     },
   ]);
 
   const [selectedProject, setSelectedProject] = useState(projects[0]);
+  const [filterStatus, setFilterStatus] = useState('all');
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'active':
+        return 'bg-green-100 text-green-700 border-green-300';
+      case 'in-progress':
+        return 'bg-blue-100 text-blue-700 border-blue-300';
+      case 'completed':
+        return 'bg-purple-100 text-purple-700 border-purple-300';
+      case 'on-hold':
+        return 'bg-yellow-100 text-yellow-700 border-yellow-300';
+      case 'cancelled':
+        return 'bg-red-100 text-red-700 border-red-300';
+      default:
+        return 'bg-gray-100 text-gray-700 border-gray-300';
+    }
+  };
+
+  const filteredProjects = projects.filter((project) => {
+    if (filterStatus === 'all') return true;
+    return project.status === filterStatus;
+  });
 
   return (
     <div className="w-full max-w-7xl mx-auto">
@@ -52,15 +81,34 @@ const ProjectChat = () => {
           </button>
         </div>
 
+        {/* Filter */}
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Filter by Status
+          </label>
+          <select
+            value={filterStatus}
+            onChange={(e) => setFilterStatus(e.target.value)}
+            className="w-full sm:w-64 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+          >
+            <option value="all">All Projects</option>
+            <option value="active">Active</option>
+            <option value="in-progress">In Progress</option>
+            <option value="completed">Completed</option>
+            <option value="on-hold">On Hold</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Project List Sidebar */}
           <div className="lg:col-span-1">
             <div className="bg-gray-50 rounded-lg p-4">
               <h2 className="text-lg font-semibold text-gray-800 mb-4">
-                Active Projects
+                Projects ({filteredProjects.length})
               </h2>
-              <div className="space-y-2">
-                {projects.map((project) => (
+              <div className="space-y-2 max-h-[600px] overflow-y-auto">
+                {filteredProjects.map((project) => (
                   <div
                     key={project.id}
                     onClick={() => setSelectedProject(project)}
@@ -82,6 +130,17 @@ const ProjectChat = () => {
                     >
                       {project.code}
                     </p>
+                    <div className="flex items-center gap-2 mt-2">
+                      <span
+                        className={`text-xs px-2 py-0.5 rounded-full border ${
+                          selectedProject?.id === project.id
+                            ? 'bg-blue-500 text-white border-blue-400'
+                            : getStatusColor(project.status)
+                        }`}
+                      >
+                        {project.status.replace('-', ' ').toUpperCase()}
+                      </span>
+                    </div>
                     <div className="flex items-center gap-1 mt-2">
                       <span
                         className={`text-xs ${
@@ -121,7 +180,47 @@ const ProjectChat = () => {
 
           {/* Chat Area */}
           <div className="lg:col-span-3">
-            <div className="h-[600px] sm:h-[700px]">
+            {/* Project Info Card */}
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4 mb-4 border-2 border-blue-200">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                    {selectedProject.name}
+                  </h3>
+                  <p className="text-sm text-gray-600 mb-3">
+                    {selectedProject.description}
+                  </p>
+                  <div className="flex flex-wrap gap-3 text-xs">
+                    <span className="flex items-center gap-1">
+                      <span className="font-medium">Project Code:</span>
+                      <span className="text-blue-600">
+                        {selectedProject.code}
+                      </span>
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <span className="font-medium">Start Date:</span>
+                      <span>{selectedProject.startDate}</span>
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <span className="font-medium">Team Size:</span>
+                      <span className="text-blue-600">
+                        {selectedProject.teamMembers.length} members
+                      </span>
+                    </span>
+                  </div>
+                </div>
+                <span
+                  className={`inline-block px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(
+                    selectedProject.status
+                  )} w-fit`}
+                >
+                  {selectedProject.status.replace('-', ' ').toUpperCase()}
+                </span>
+              </div>
+            </div>
+
+            {/* Chat Component */}
+            <div className="h-[500px] sm:h-[600px]">
               <Chat
                 chatId={selectedProject.id}
                 chatType="project"
