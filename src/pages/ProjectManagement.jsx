@@ -5,7 +5,7 @@ const ProjectManagement = () => {
   const navigate = useNavigate();
 
   // Mock data - Replace with API calls
-  const [projects] = useState([
+  const [projects, setProjects] = useState([
     {
       id: 1,
       projectName: 'SKYTRON BACK END',
@@ -210,14 +210,32 @@ const ProjectManagement = () => {
     return matchesStatus && matchesSearch;
   });
 
-  const handleViewProject = (projectId) => {
-    console.log('View project:', projectId);
-    // Navigate to project details page
+
+  const handleAssignMember = (projectId) => {
+    console.log('Assign member to project:', projectId);
+    // Navigate to assign member page or open modal
+    navigate(`/assign-members/${projectId}`);
   };
 
-  const handleEditProject = (projectId) => {
-    console.log('Edit project:', projectId);
-    // Navigate to edit project page
+  const handleDeleteMember = (projectId, memberName) => {
+    const confirmDelete = window.confirm(`Are you sure you want to remove ${memberName} from this project?`);
+    if (confirmDelete) {
+      setProjects(prevProjects => 
+        prevProjects.map(project => {
+          if (project.id === projectId) {
+            // Remove the member from teamMembers string
+            const currentMembers = project.teamMembers.split(' / ');
+            const updatedMembers = currentMembers.filter(member => member.trim() !== memberName);
+            return {
+              ...project,
+              teamMembers: updatedMembers.join(' / ')
+            };
+          }
+          return project;
+        })
+      );
+      alert(`${memberName} has been removed from the project.`);
+    }
   };
 
 
@@ -375,29 +393,21 @@ const ProjectManagement = () => {
                       </div>
                       <div className="flex flex-wrap gap-2">
                         {project.teamMembers.split(' / ').map((member, index) => (
-                          <span
+                          <div
                             key={index}
-                            className="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full border border-blue-200"
+                            className="flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full border border-blue-200"
                           >
-                            {member.trim()}
-                          </span>
+                            <span>{member.trim()}</span>
+                            <button
+                              onClick={() => handleDeleteMember(project.id, member.trim())}
+                              className="ml-1 text-red-500 hover:text-red-700 hover:bg-red-100 rounded-full p-0.5 transition-colors"
+                              title={`Remove ${member.trim()} from project`}
+                            >
+                              ✕
+                            </button>
+                          </div>
                         ))}
                       </div>
-                      {project.appTeam && project.appTeam !== 'Not specified' && (
-                        <div className="mt-2">
-                          <span className="text-sm font-semibold text-gray-700">📱 App Team:</span>
-                          <div className="flex flex-wrap gap-2 mt-1">
-                            {project.appTeam.split(' / ').map((member, index) => (
-                              <span
-                                key={index}
-                                className="px-3 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded-full border border-purple-200"
-                              >
-                                {member.trim()}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      )}
                     </div>
 
                     {/* Progress Bar */}
@@ -420,16 +430,10 @@ const ProjectManagement = () => {
                   {/* Actions */}
                   <div className="flex lg:flex-col gap-2">
                     <button
-                      onClick={() => handleViewProject(project.id)}
-                      className="flex-1 lg:flex-none px-4 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 whitespace-nowrap"
+                      onClick={() => handleAssignMember(project.id)}
+                      className="flex-1 lg:flex-none px-4 py-2 bg-green-600 text-white text-sm rounded hover:bg-green-700 whitespace-nowrap"
                     >
-                      View Details
-                    </button>
-                    <button
-                      onClick={() => handleEditProject(project.id)}
-                      className="flex-1 lg:flex-none px-4 py-2 bg-gray-600 text-white text-sm rounded hover:bg-gray-700 whitespace-nowrap"
-                    >
-                      Edit
+                      👥 Assign Member
                     </button>
                   </div>
                 </div>

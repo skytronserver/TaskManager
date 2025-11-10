@@ -11,30 +11,28 @@ export const menuItems = {
     { text: 'Create Department(Optional)', icon: '🏛️', path: '/create-department', roles: ['admin'] },
   ],
 
-   CreateUsers: [
+  CreateUsers: [
     { text: 'Create User', icon: '👤', path: '/create-user', roles: ['admin'] },
   ],
-
 
   Organization: [
     // { text: 'Task Methodology', icon: '⚙️', path: '/task-methodology', roles: ['admin'] },
     { text: 'Organisational Hierarchy', icon: '🎯', path: '/designation', roles: ['admin'] },
   ],
 
-  CreateUsers: [
-    { text: 'Create User', icon: '👤', path: '/create-user', roles: ['admin'] },
-  ],
-
   Assign: [
     { text: 'Individual Task', icon: '📝', path: '/assign-task', roles: ['admin'] },
-    { text: 'Project', icon: '📁', path: '/create-project', roles: ['admin'] },
-   ],
+  ],
 
-   Management: [
-     { text: 'Task Management', icon: '📋', path: '/task-management', roles: ['admin'] },
-     { text: 'Project Management', icon: '📂', path: '/project-management', roles: ['admin'] },
-     { text: 'User Management', icon: '👥', path: '/user-management', roles: ['admin'] },
-     { text: 'Holiday Calendar', icon: '📅', path: '/holiday-calendar', roles: ['admin'] },
+  CreateProject: [
+    { text: 'Project', icon: '📁', path: '/create-project', roles: ['admin'] },
+  ],
+
+  Management: [
+    { text: 'Project Management', icon: '📂', path: '/project-management', roles: ['admin'] },
+    { text: 'Task Management', icon: '📋', path: '/task-management', roles: ['admin'] },
+    { text: 'User Management', icon: '👥', path: '/user-management', roles: ['admin'] },
+    { text: 'Holiday Calendar', icon: '📅', path: '/holiday-calendar', roles: ['admin'] },
   ],
 
   Communication: [

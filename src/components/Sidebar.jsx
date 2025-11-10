@@ -96,6 +96,7 @@ const Sidebar = ({ open = true, mobileOpen = false, onMobileClose = () => {} }) 
     Department: true,
     Organization: true,
     CreateUsers: true,
+    CreateProject: true,
     Assign: true,
     Management: true,
     Communication: true,
@@ -225,6 +226,11 @@ const Sidebar = ({ open = true, mobileOpen = false, onMobileClose = () => {} }) 
 
         {renderCategory('Assign', menuItems.Assign, 'Assign')}
         {filterMenuItems(menuItems.Assign).length > 0 && (
+          <Divider sx={{ my: 2, opacity: 0.5 }} />
+        )}
+
+        {renderCategory('Create Project', menuItems.CreateProject, 'CreateProject')}
+        {filterMenuItems(menuItems.CreateProject).length > 0 && (
           <Divider sx={{ my: 2, opacity: 0.5 }} />
         )}
 

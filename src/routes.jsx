@@ -8,6 +8,7 @@ import CreateCompany from './pages/CreateCompany'
 import CreateDepartment from './pages/CreateDepartment'
 import CreateProject from './pages/CreateProject'
 import ProjectManagement from './pages/ProjectManagement'
+import AssignMembers from './pages/AssignMembers'
 import TaskMethodology from './pages/TaskMethodology'
 import Designation from './pages/Designation'
 import AssignTask from './pages/AssignTask'
@@ -22,10 +23,14 @@ import UserManagement from './pages/UserManagement'
 import HolidayCalendar from './pages/HolidayCalendar'
 import ProjectChat from './pages/ProjectChat'
 import TaskChat from './pages/TaskChat'
+import Login from './pages/Login'
+import Register from './pages/Register'
 
 export default function AppRoutes() {
   return (
     <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
       <Route path="/" element={<Dashboard />} />
       <Route path="/create-team" element={<CreateTeam />} />
       <Route path="/create-company" element={<CreateCompany />} />
@@ -35,6 +40,7 @@ export default function AppRoutes() {
       <Route path="/create-team-member" element={<CreateTeamMember />} />
       <Route path="/create-project" element={<CreateProject />} />
       <Route path="/project-management" element={<ProjectManagement />} />
+      <Route path="/assign-members/:projectId" element={<AssignMembers />} />
       <Route path="/task-methodology" element={<TaskMethodology />} />
       <Route path="/designation" element={<Designation />} />
       <Route path="/assign-task" element={<AssignTask />} />
@@ -49,17 +55,6 @@ export default function AppRoutes() {
       <Route path="/holiday-calendar" element={<HolidayCalendar />} />
       <Route path="/project-chat" element={<ProjectChat />} />
       <Route path="/task-chat" element={<TaskChat />} />
-      <Route
-        path="/users"
-        element={
-          <div className="bg-white rounded-lg shadow-md p-8">
-            <h2 className="text-2xl font-bold text-slate-800">Users List</h2>
-            <p className="text-slate-600 mt-2">User management coming soon...</p>
-          </div>
-        }
-      />
     </Routes>
   )
 }
-
-
