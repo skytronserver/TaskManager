@@ -435,6 +435,18 @@ const ProjectManagement = () => {
                     >
                       👥 Assign Member
                     </button>
+                    <button
+                      onClick={() => navigate(`/project/${project.id}/tasks`)}
+                      className="flex-1 lg:flex-none px-4 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 whitespace-nowrap"
+                    >
+                      📋 Manage Tasks
+                    </button>
+                    <button
+                      onClick={() => navigate(`/project/${project.id}/chat`)}
+                      className="flex-1 lg:flex-none px-4 py-2 bg-purple-600 text-white text-sm rounded hover:bg-purple-700 whitespace-nowrap"
+                    >
+                      💬 Project Chat
+                    </button>
                   </div>
                 </div>
               </div>
@@ -444,12 +456,6 @@ const ProjectManagement = () => {
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-end mt-6">
-          <button
-            onClick={() => navigate('/project-chat')}
-            className="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 flex items-center justify-center gap-2"
-          >
-            👥 Project Group Chat
-          </button>
           <button
             onClick={() => navigate('/')}
             className="px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100"

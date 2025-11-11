@@ -8,6 +8,8 @@ import CreateCompany from './pages/CreateCompany'
 import CreateDepartment from './pages/CreateDepartment'
 import CreateProject from './pages/CreateProject'
 import ProjectManagement from './pages/ProjectManagement'
+import ProjectTaskManagement from './pages/ProjectTaskManagement'
+import ProjectSpecificChat from './pages/ProjectSpecificChat'
 import AssignMembers from './pages/AssignMembers'
 import TaskMethodology from './pages/TaskMethodology'
 import Designation from './pages/Designation'
@@ -18,6 +20,7 @@ import TaskManagement from './pages/TaskManagement'
 import Reports from './pages/Reports'
 import MyTasks from './pages/MyTasks'
 import IndividualTasks from './pages/IndividualTasks'
+import IndividualTasksManagement from './pages/IndividualTasksManagement'
 import MemberQuery from './pages/MemberQuery'
 import UserManagement from './pages/UserManagement'
 import HolidayCalendar from './pages/HolidayCalendar'
@@ -40,12 +43,15 @@ export default function AppRoutes() {
       <Route path="/create-team-member" element={<CreateTeamMember />} />
       <Route path="/create-project" element={<CreateProject />} />
       <Route path="/project-management" element={<ProjectManagement />} />
+      <Route path="/project/:projectId/tasks" element={<ProjectTaskManagement />} />
+      <Route path="/project/:projectId/chat" element={<ProjectSpecificChat />} />
       <Route path="/assign-members/:projectId" element={<AssignMembers />} />
       <Route path="/task-methodology" element={<TaskMethodology />} />
       <Route path="/designation" element={<Designation />} />
       <Route path="/assign-task" element={<AssignTask />} />
       <Route path="/my-tasks" element={<MyTasks />} />
       <Route path="/individual-tasks" element={<IndividualTasks />} />
+      <Route path="/individual-tasks-management" element={<IndividualTasksManagement />} />
       <Route path="/member-query" element={<MemberQuery />} />
       <Route path="/query-reply" element={<QueryReply />} />
       <Route path="/alert-management" element={<AlertManagement />} />

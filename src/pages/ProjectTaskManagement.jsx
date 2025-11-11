@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const TaskManagement = () => {
+const ProjectTaskManagement = () => {
   const navigate = useNavigate();
+  const { projectId } = useParams();
   
   // Mock projects data
   const [projects] = useState([
@@ -72,141 +73,23 @@ const TaskManagement = () => {
     },
   ]);
 
+  const currentProject = projects.find(p => p.id === parseInt(projectId));
+
   // Load tasks from localStorage or use default data
   const loadTasks = () => {
     const savedTasks = localStorage.getItem('allTasks');
     if (savedTasks) {
       return JSON.parse(savedTasks);
     }
-    // Default tasks if localStorage is empty
-    return [
-      {
-        id: 1,
-        title: 'Update User Dashboard',
-        description: 'Redesign the user dashboard with new UI components',
-        assignedTo: 'John Doe',
-        assignedBy: 'Admin',
-        priority: 'High',
-        dueDate: '2025-11-05',
-        status: 'in-progress',
-        type: 'oneTime',
-        projectId: 1,
-      },
-      {
-        id: 2,
-        title: 'Database Optimization',
-        description: 'Optimize database queries for better performance',
-        assignedTo: 'Jane Smith',
-        assignedBy: 'Team Leader',
-        priority: 'Critical',
-        dueDate: '2025-11-02',
-        status: 'pending',
-        type: 'oneTime',
-        projectId: 1,
-      },
-      {
-        id: 3,
-        title: 'Daily Standup Report',
-        description: 'Submit daily standup report',
-        assignedTo: 'Mike Johnson',
-        assignedBy: 'Team Leader',
-        priority: 'Medium',
-        dueDate: '2025-10-31',
-        status: 'completed',
-        type: 'repetitive',
-        projectId: 2,
-      },
-      {
-        id: 4,
-        title: 'API Integration Testing',
-        description: 'Complete integration testing for payment gateway API',
-        assignedTo: 'John Doe',
-        assignedBy: 'Admin',
-        priority: 'High',
-        dueDate: '2025-11-08',
-        status: 'extension-requested',
-        type: 'oneTime',
-        projectId: 1,
-        requestedExtensionDate: '2025-11-15',
-        extensionReason: 'Need additional time to test edge cases and handle error scenarios. Payment gateway documentation was incomplete.',
-        extensionRequestDate: '2025-11-04T10:30:00Z',
-      },
-      {
-        id: 5,
-        title: 'Code Review - Authentication Module',
-        description: 'Review and provide feedback on the new authentication implementation',
-        assignedTo: 'John Doe',
-        assignedBy: 'Team Leader',
-        priority: 'Medium',
-        dueDate: '2025-11-06',
-        status: 'pending',
-        type: 'oneTime',
-        projectId: 1,
-      },
-      {
-        id: 6,
-        title: 'Fix Bug - Login Page Redirect',
-        description: 'Users are not being redirected properly after login. Fix the routing issue.',
-        assignedTo: 'John Doe',
-        assignedBy: 'Admin',
-        priority: 'Critical',
-        dueDate: '2025-11-05',
-        status: 'in-progress',
-        type: 'oneTime',
-        projectId: 1,
-      },
-      {
-        id: 7,
-        title: 'Update Documentation',
-        description: 'Update API documentation with new endpoints and examples',
-        assignedTo: 'John Doe',
-        assignedBy: 'Team Leader',
-        priority: 'Low',
-        dueDate: '2025-11-12',
-        status: 'pending',
-        type: 'oneTime',
-        projectId: 1,
-      },
-      {
-        id: 8,
-        title: 'Performance Optimization',
-        description: 'Optimize database queries for the user dashboard to improve load time',
-        assignedTo: 'John Doe',
-        assignedBy: 'Admin',
-        priority: 'High',
-        dueDate: '2025-11-10',
-        status: 'in-progress',
-        type: 'oneTime',
-        projectId: 1,
-      },
-      {
-        id: 9,
-        title: 'Setup CI/CD Pipeline',
-        description: 'Configure automated testing and deployment pipeline',
-        assignedTo: 'John Doe',
-        assignedBy: 'Admin',
-        priority: 'Medium',
-        dueDate: '2025-11-20',
-        status: 'pending',
-        type: 'oneTime',
-        projectId: 2,
-      },
-    ];
+    return [];
   };
 
   const [tasks, setTasks] = useState(loadTasks());
-
-  // Save tasks to localStorage whenever they change
-  useEffect(() => {
-    localStorage.setItem('allTasks', JSON.stringify(tasks));
-  }, [tasks]);
-
   const [selectedTask, setSelectedTask] = useState(null);
   const [actionType, setActionType] = useState('');
   const [actionNote, setActionNote] = useState('');
   const [extensionDate, setExtensionDate] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
-  const [selectedProjectId, setSelectedProjectId] = useState('all');
   const [showCreateTask, setShowCreateTask] = useState(false);
   const [newTask, setNewTask] = useState({
     title: '',
@@ -214,15 +97,21 @@ const TaskManagement = () => {
     assignedTo: '',
     priority: 'Medium',
     dueDate: '',
-    projectId: '',
   });
   const [reassignTo, setReassignTo] = useState('');
+
+  // Save tasks to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('allTasks', JSON.stringify(tasks));
+  }, [tasks]);
+
+  // Filter tasks for current project
+  const projectTasks = tasks.filter(task => task.projectId === parseInt(projectId));
 
   const handleTaskSelect = (task) => {
     setSelectedTask(task);
     setActionType('');
     setActionNote('');
-    // Pre-fill extension date if there's a request
     setExtensionDate(task.requestedExtensionDate || '');
     setReassignTo('');
   };
@@ -323,53 +212,9 @@ const TaskManagement = () => {
     setReassignTo('');
   };
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'pending':
-        return 'bg-yellow-100 text-yellow-700 border-yellow-300';
-      case 'in-progress':
-        return 'bg-blue-100 text-blue-700 border-blue-300';
-      case 'completed':
-        return 'bg-green-100 text-green-700 border-green-300';
-      case 'approved':
-        return 'bg-purple-100 text-purple-700 border-purple-300';
-      case 'extended':
-        return 'bg-orange-100 text-orange-700 border-orange-300';
-      case 'extension-requested':
-        return 'bg-orange-100 text-orange-700 border-orange-300';
-      case 'abandoned':
-        return 'bg-red-100 text-red-700 border-red-300';
-      case 'closed':
-        return 'bg-gray-100 text-gray-700 border-gray-300';
-      default:
-        return 'bg-gray-100 text-gray-700 border-gray-300';
-    }
-  };
-
-  const getPriorityColor = (priority) => {
-    switch (priority) {
-      case 'Critical':
-        return 'text-red-600';
-      case 'High':
-        return 'text-orange-600';
-      case 'Medium':
-        return 'text-yellow-600';
-      case 'Low':
-        return 'text-green-600';
-      default:
-        return 'text-gray-600';
-    }
-  };
-
-  const priorities = ['Low', 'Medium', 'High', 'Critical'];
-
   const handleCreateTask = () => {
     if (!newTask.title.trim()) {
       alert('Task title is required');
-      return;
-    }
-    if (!newTask.projectId) {
-      alert('Please select a project');
       return;
     }
     if (!newTask.assignedTo) {
@@ -380,7 +225,8 @@ const TaskManagement = () => {
     const task = {
       id: Date.now(),
       ...newTask,
-      assignedBy: 'Admin', // Current user
+      projectId: parseInt(projectId),
+      assignedBy: 'Admin',
       status: 'pending',
       type: 'oneTime',
     };
@@ -392,70 +238,97 @@ const TaskManagement = () => {
       assignedTo: '',
       priority: 'Medium',
       dueDate: '',
-      projectId: '',
     });
     setShowCreateTask(false);
     alert('Task created successfully!');
   };
 
-  const getProjectTeamMembers = (projectId) => {
-    const project = projects.find((p) => p.id === parseInt(projectId));
-    return project ? project.teamMembers : [];
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'pending': return 'bg-yellow-100 text-yellow-700 border-yellow-300';
+      case 'in-progress': return 'bg-blue-100 text-blue-700 border-blue-300';
+      case 'completed': return 'bg-green-100 text-green-700 border-green-300';
+      case 'approved': return 'bg-purple-100 text-purple-700 border-purple-300';
+      case 'extended': return 'bg-orange-100 text-orange-700 border-orange-300';
+      case 'extension-requested': return 'bg-orange-100 text-orange-700 border-orange-300';
+      case 'abandoned': return 'bg-red-100 text-red-700 border-red-300';
+      case 'closed': return 'bg-gray-100 text-gray-700 border-gray-300';
+      default: return 'bg-gray-100 text-gray-700 border-gray-300';
+    }
   };
 
-  const filteredTasks = tasks.filter((t) => {
-    const statusMatch = filterStatus === 'all' || t.status === filterStatus;
-    const projectMatch = selectedProjectId === 'all' || t.projectId === parseInt(selectedProjectId);
-    return statusMatch && projectMatch;
+  const getPriorityColor = (priority) => {
+    switch (priority) {
+      case 'Critical': return 'text-red-600';
+      case 'High': return 'text-orange-600';
+      case 'Medium': return 'text-yellow-600';
+      case 'Low': return 'text-green-600';
+      default: return 'text-gray-600';
+    }
+  };
+
+  const filteredTasks = projectTasks.filter((t) => {
+    return filterStatus === 'all' || t.status === filterStatus;
   });
+
+  if (!currentProject) {
+    return (
+      <div className="w-full max-w-7xl mx-auto">
+        <div className="bg-white rounded-lg shadow-md p-8 text-center">
+          <h1 className="text-2xl font-semibold text-red-600 mb-4">Project Not Found</h1>
+          <button
+            onClick={() => navigate('/project-management')}
+            className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+          >
+            Back to Project Management
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full max-w-7xl mx-auto">
       <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 md:p-8">
-        <h1 className="text-2xl sm:text-3xl font-semibold text-blue-600 mb-4 sm:mb-6">
-          Task Management
-        </h1>
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-semibold text-blue-600">
+              Task Management
+            </h1>
+            <p className="text-gray-600 mt-1">
+              📁 {currentProject.name} ({currentProject.code})
+            </p>
+          </div>
+          <button
+            onClick={() => navigate('/project-management')}
+            className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100"
+          >
+            ← Back to Projects
+          </button>
+        </div>
 
         {/* Filters and Create Button */}
         <div className="mb-6 flex flex-col sm:flex-row gap-4 items-start sm:items-end justify-between">
-          <div className="flex flex-col sm:flex-row gap-4 flex-1">
-            <div className="flex-1">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Filter by Project
-              </label>
-              <select
-                value={selectedProjectId}
-                onChange={(e) => setSelectedProjectId(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-              >
-                <option value="all">All Projects</option>
-                {projects.map((project) => (
-                  <option key={project.id} value={project.id}>
-                    {project.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="flex-1">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Filter by Status
-              </label>
-              <select
-                value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-              >
-                <option value="all">All Tasks</option>
-                <option value="pending">Pending</option>
-                <option value="in-progress">In Progress</option>
-                <option value="extension-requested">⏰ Extension Requested</option>
-                <option value="completed">Completed</option>
-                <option value="approved">Approved</option>
-                <option value="extended">Extended</option>
-                <option value="abandoned">Abandoned</option>
-                <option value="closed">Closed</option>
-              </select>
-            </div>
+          <div className="flex-1">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Filter by Status
+            </label>
+            <select
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+            >
+              <option value="all">All Tasks</option>
+              <option value="pending">Pending</option>
+              <option value="in-progress">In Progress</option>
+              <option value="extension-requested">⏰ Extension Requested</option>
+              <option value="completed">Completed</option>
+              <option value="approved">Approved</option>
+              <option value="extended">Extended</option>
+              <option value="abandoned">Abandoned</option>
+              <option value="closed">Closed</option>
+            </select>
           </div>
           <button
             onClick={() => setShowCreateTask(!showCreateTask)}
@@ -472,38 +345,33 @@ const TaskManagement = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Project <span className="text-red-500">*</span>
-                </label>
-                <select
-                  value={newTask.projectId}
-                  onChange={(e) => setNewTask({ ...newTask, projectId: e.target.value, assignedTo: '' })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-                >
-                  <option value="">Select project</option>
-                  {projects.map((project) => (
-                    <option key={project.id} value={project.id}>
-                      {project.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
                   Assign To <span className="text-red-500">*</span>
                 </label>
                 <select
                   value={newTask.assignedTo}
                   onChange={(e) => setNewTask({ ...newTask, assignedTo: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-                  disabled={!newTask.projectId}
                 >
                   <option value="">Select team member</option>
-                  {getProjectTeamMembers(newTask.projectId).map((member) => (
+                  {currentProject.teamMembers.map((member) => (
                     <option key={member.id} value={member.name}>
                       {member.name} - {member.designation}
                     </option>
                   ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Priority</label>
+                <select
+                  value={newTask.priority}
+                  onChange={(e) => setNewTask({ ...newTask, priority: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                >
+                  <option value="Low">Low</option>
+                  <option value="Medium">Medium</option>
+                  <option value="High">High</option>
+                  <option value="Critical">Critical</option>
                 </select>
               </div>
 
@@ -532,21 +400,6 @@ const TaskManagement = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Priority</label>
-                <select
-                  value={newTask.priority}
-                  onChange={(e) => setNewTask({ ...newTask, priority: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-                >
-                  {priorities.map((p) => (
-                    <option key={p} value={p}>
-                      {p}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Due Date</label>
                 <input
                   type="date"
@@ -556,26 +409,16 @@ const TaskManagement = () => {
                 />
               </div>
 
-              <div className="md:col-span-2 flex flex-col sm:flex-row justify-end gap-3">
+              <div className="md:col-span-2 flex justify-end gap-3">
                 <button
-                  onClick={() => {
-                    setShowCreateTask(false);
-                    setNewTask({
-                      title: '',
-                      description: '',
-                      assignedTo: '',
-                      priority: 'Medium',
-                      dueDate: '',
-                      projectId: '',
-                    });
-                  }}
-                  className="w-full sm:w-auto px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100"
+                  onClick={() => setShowCreateTask(false)}
+                  className="px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleCreateTask}
-                  className="w-full sm:w-auto px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                  className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
                 >
                   Create Task
                 </button>
@@ -583,6 +426,32 @@ const TaskManagement = () => {
             </div>
           </div>
         )}
+
+        {/* Tasks Summary */}
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-6">
+          <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+            <p className="text-sm text-gray-600 mb-1">Total Tasks</p>
+            <p className="text-2xl font-bold text-blue-600">{projectTasks.length}</p>
+          </div>
+          <div className="bg-yellow-50 rounded-lg p-4 border border-yellow-200">
+            <p className="text-sm text-gray-600 mb-1">Pending</p>
+            <p className="text-2xl font-bold text-yellow-600">
+              {projectTasks.filter(t => t.status === 'pending').length}
+            </p>
+          </div>
+          <div className="bg-green-50 rounded-lg p-4 border border-green-200">
+            <p className="text-sm text-gray-600 mb-1">Completed</p>
+            <p className="text-2xl font-bold text-green-600">
+              {projectTasks.filter(t => t.status === 'completed' || t.status === 'closed').length}
+            </p>
+          </div>
+          <div className="bg-orange-50 rounded-lg p-4 border border-orange-200">
+            <p className="text-sm text-gray-600 mb-1">In Progress</p>
+            <p className="text-2xl font-bold text-orange-600">
+              {projectTasks.filter(t => t.status === 'in-progress').length}
+            </p>
+          </div>
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Tasks List */}
@@ -622,7 +491,7 @@ const TaskManagement = () => {
                     </div>
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0">
                       <span className="text-xs text-blue-600 font-medium truncate">
-                        📁 {projects.find((p) => p.id === task.projectId)?.name || 'N/A'}
+                        📁 {currentProject.name}
                       </span>
                       <span
                         className={`inline-block px-2 py-1 rounded-full text-xs font-medium border ${getStatusColor(
@@ -810,14 +679,11 @@ const TaskManagement = () => {
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                       >
                         <option value="">Select team member</option>
-                        {selectedTask.projectId && 
-                          projects
-                            .find((p) => p.id === selectedTask.projectId)
-                            ?.teamMembers.map((member) => (
-                              <option key={member.id} value={member.name}>
-                                {member.name} - {member.designation}
-                              </option>
-                            ))}
+                        {currentProject.teamMembers.map((member) => (
+                          <option key={member.id} value={member.name}>
+                            {member.name} - {member.designation}
+                          </option>
+                        ))}
                       </select>
                     </div>
                   )}
@@ -838,41 +704,21 @@ const TaskManagement = () => {
                       onClick={handleAction}
                       className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
                     >
-                      Submit Action
+                      Execute Action
                     </button>
                   </div>
                 </div>
               </>
             ) : (
-              <div className="flex items-center justify-center h-full text-gray-500">
-                <div className="text-center">
-                  <p className="text-lg mb-2">📋</p>
-                  <p>Select a task to view details and take actions</p>
-                </div>
+              <div className="text-center py-8 text-gray-500">
+                <p>Select a task to view details and perform actions</p>
               </div>
             )}
           </div>
-        </div>
-
-        <div className="flex flex-col sm:flex-row gap-4 justify-end mt-8">
-          <button
-            type="button"
-            onClick={() => navigate('/task-chat')}
-            className="px-6 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 flex items-center justify-center gap-2"
-          >
-            💬 Task Chat
-          </button>
-          <button
-            type="button"
-            onClick={() => navigate('/')}
-            className="px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100"
-          >
-            Back to Dashboard
-          </button>
         </div>
       </div>
     </div>
   );
 };
 
-export default TaskManagement;
+export default ProjectTaskManagement;

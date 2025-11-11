@@ -98,7 +98,7 @@ const Sidebar = ({ open = true, mobileOpen = false, onMobileClose = () => {} }) 
     CreateUsers: true,
     CreateProject: true,
     Assign: true,
-    Management: true,
+    Holiday: true,
     Communication: true,
     MyWork: true,
     Alerts: true,
@@ -234,8 +234,8 @@ const Sidebar = ({ open = true, mobileOpen = false, onMobileClose = () => {} }) 
           <Divider sx={{ my: 2, opacity: 0.5 }} />
         )}
 
-        {renderCategory('Management', menuItems.Management, 'Management')}
-        {filterMenuItems(menuItems.Management).length > 0 && (
+        {renderCategory('Holiday', menuItems.Holiday, 'Holiday')}
+        {filterMenuItems(menuItems.Holiday).length > 0 && (
           <Divider sx={{ my: 2, opacity: 0.5 }} />
         )}
 

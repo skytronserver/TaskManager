@@ -13,6 +13,7 @@ export const menuItems = {
 
   CreateUsers: [
     { text: 'Create User', icon: '👤', path: '/create-user', roles: ['admin'] },
+    { text: 'User Management', icon: '👥', path: '/user-management', roles: ['admin'] },
   ],
 
   Organization: [
@@ -21,23 +22,21 @@ export const menuItems = {
   ],
 
   Assign: [
-    { text: 'Individual Task', icon: '📝', path: '/assign-task', roles: ['admin'] },
+    { text: 'Assign Individual Task', icon: '📝', path: '/assign-task', roles: ['admin'] },
+    { text: 'Individual Tasks', icon: '📋', path: '/individual-tasks-management', roles: ['admin'] },
   ],
 
   CreateProject: [
     { text: 'Project', icon: '📁', path: '/create-project', roles: ['admin'] },
+    { text: 'Project Management', icon: '📂', path: '/project-management', roles: ['admin'] },
   ],
 
-  Management: [
-    { text: 'Project Management', icon: '📂', path: '/project-management', roles: ['admin'] },
-    { text: 'Task Management', icon: '📋', path: '/task-management', roles: ['admin'] },
-    { text: 'User Management', icon: '👥', path: '/user-management', roles: ['admin'] },
+  Holiday: [
     { text: 'Holiday Calendar', icon: '📅', path: '/holiday-calendar', roles: ['admin'] },
   ],
 
   Communication: [
-    { text: 'Project Group Chat', icon: '👥', path: '/project-chat', roles: ['admin', 'user'] },
-    { text: 'Task Chat', icon: '💬', path: '/task-chat', roles: ['admin', 'user'] },
+    { text: 'Individual Chat', icon: '💬', path: '/task-chat', roles: ['admin', 'user'] },
   ],
 
   MyWork: [
