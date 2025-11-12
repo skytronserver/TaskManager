@@ -28,6 +28,7 @@ import ProjectChat from './pages/ProjectChat'
 import TaskChat from './pages/TaskChat'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import JoinProject from './pages/JoinProject'
 
 export default function AppRoutes() {
   return (
@@ -46,6 +47,7 @@ export default function AppRoutes() {
       <Route path="/project/:projectId/tasks" element={<ProjectTaskManagement />} />
       <Route path="/project/:projectId/chat" element={<ProjectSpecificChat />} />
       <Route path="/assign-members/:projectId" element={<AssignMembers />} />
+      <Route path="/join-project/:projectId" element={<JoinProject />} />
       <Route path="/task-methodology" element={<TaskMethodology />} />
       <Route path="/designation" element={<Designation />} />
       <Route path="/assign-task" element={<AssignTask />} />
