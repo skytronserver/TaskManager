@@ -77,11 +77,234 @@ const ProjectTaskManagement = () => {
 
   // Load tasks from localStorage or use default data
   const loadTasks = () => {
-    const savedTasks = localStorage.getItem('allTasks');
-    if (savedTasks) {
-      return JSON.parse(savedTasks);
-    }
-    return [];
+    // Temporarily disable localStorage to show dummy tasks
+    // const savedTasks = localStorage.getItem('allTasks');
+    // if (savedTasks) {
+    //   return JSON.parse(savedTasks);
+    // }
+    
+    // Return dummy project tasks
+    return [
+      // SKYTRON BACK END Project (ID: 1) tasks
+      {
+        id: 1,
+        title: 'Backend API Development',
+        description: 'Develop REST APIs for user authentication and data management',
+        assignedTo: 'Ankur',
+        assignedBy: 'Project Manager',
+        priority: 'High',
+        dueDate: '2025-11-20',
+        startDate: '2025-11-10',
+        status: 'in-progress',
+        type: 'development',
+        projectId: 1,
+        category: 'Backend'
+      },
+      {
+        id: 2,
+        title: 'Database Integration',
+        description: 'Set up PostgreSQL database and create data models',
+        assignedTo: 'Nitul',
+        assignedBy: 'Tech Lead',
+        priority: 'Critical',
+        dueDate: '2025-11-18',
+        startDate: '2025-11-08',
+        status: 'completed',
+        type: 'development',
+        projectId: 1,
+        category: 'Database'
+      },
+      {
+        id: 3,
+        title: 'Security Implementation',
+        description: 'Implement JWT authentication and authorization',
+        assignedTo: 'Kishalay',
+        assignedBy: 'Security Lead',
+        priority: 'High',
+        dueDate: '2025-11-25',
+        startDate: '2025-11-15',
+        status: 'pending',
+        type: 'development',
+        projectId: 1,
+        category: 'Security'
+      },
+      {
+        id: 4,
+        title: 'Performance Testing',
+        description: 'Load testing and performance optimization',
+        assignedTo: 'Ankur',
+        assignedBy: 'QA Lead',
+        priority: 'Medium',
+        dueDate: '2025-11-28',
+        startDate: '2025-11-20',
+        status: 'extension-requested',
+        type: 'testing',
+        projectId: 1,
+        category: 'Testing'
+      },
+      
+      // DWARPAL AI Project (ID: 2) tasks
+      {
+        id: 5,
+        title: 'AI Model Training',
+        description: 'Train machine learning models for natural language processing',
+        assignedTo: 'Ankur',
+        assignedBy: 'AI Lead',
+        priority: 'Critical',
+        dueDate: '2025-11-22',
+        startDate: '2025-11-12',
+        status: 'in-progress',
+        type: 'development',
+        projectId: 2,
+        category: 'AI/ML'
+      },
+      {
+        id: 6,
+        title: 'Data Pipeline Setup',
+        description: 'Create data ingestion and processing pipeline',
+        assignedTo: 'Twinkle',
+        assignedBy: 'Data Engineer',
+        priority: 'High',
+        dueDate: '2025-11-24',
+        startDate: '2025-11-14',
+        status: 'pending',
+        type: 'development',
+        projectId: 2,
+        category: 'Data Engineering'
+      },
+      {
+        id: 7,
+        title: 'Model Deployment',
+        description: 'Deploy AI models to production environment',
+        assignedTo: 'Ankur',
+        assignedBy: 'DevOps Lead',
+        priority: 'High',
+        dueDate: '2025-11-30',
+        startDate: '2025-11-25',
+        status: 'pending',
+        type: 'deployment',
+        projectId: 2,
+        category: 'DevOps'
+      },
+      
+      // PENDULUM Task Management App (ID: 3) tasks
+      {
+        id: 8,
+        title: 'React Frontend Development',
+        description: 'Build responsive React components for task management interface',
+        assignedTo: 'Nitul',
+        assignedBy: 'Frontend Lead',
+        priority: 'High',
+        dueDate: '2025-11-21',
+        startDate: '2025-11-11',
+        status: 'in-progress',
+        type: 'development',
+        projectId: 3,
+        category: 'Frontend'
+      },
+      {
+        id: 9,
+        title: 'Real-time Notifications',
+        description: 'Implement WebSocket-based real-time notifications',
+        assignedTo: 'Ankur',
+        assignedBy: 'Tech Lead',
+        priority: 'Medium',
+        dueDate: '2025-11-26',
+        startDate: '2025-11-16',
+        status: 'pending',
+        type: 'development',
+        projectId: 3,
+        category: 'Backend'
+      },
+      {
+        id: 10,
+        title: 'Mobile Responsiveness',
+        description: 'Ensure application works perfectly on mobile devices',
+        assignedTo: 'Nitul',
+        assignedBy: 'UI/UX Designer',
+        priority: 'Medium',
+        dueDate: '2025-11-28',
+        startDate: '2025-11-18',
+        status: 'completed',
+        type: 'development',
+        projectId: 3,
+        category: 'Frontend'
+      },
+      {
+        id: 11,
+        title: 'Integration Testing',
+        description: 'End-to-end testing of all application features',
+        assignedTo: 'Ankur',
+        assignedBy: 'QA Lead',
+        priority: 'High',
+        dueDate: '2025-12-02',
+        startDate: '2025-11-22',
+        status: 'extension-requested',
+        type: 'testing',
+        projectId: 3,
+        category: 'Testing'
+      },
+      
+      // ROUND THE CLOCK Project (ID: 4) tasks
+      {
+        id: 12,
+        title: 'Time Tracking System',
+        description: 'Develop comprehensive time tracking and reporting system',
+        assignedTo: 'Nitul',
+        assignedBy: 'Product Manager',
+        priority: 'Critical',
+        dueDate: '2025-11-23',
+        startDate: '2025-11-13',
+        status: 'in-progress',
+        type: 'development',
+        projectId: 4,
+        category: 'Core Features'
+      },
+      {
+        id: 13,
+        title: 'Employee Dashboard',
+        description: 'Create employee dashboard with analytics and reports',
+        assignedTo: 'Ankur',
+        assignedBy: 'UI/UX Lead',
+        priority: 'High',
+        dueDate: '2025-11-27',
+        startDate: '2025-11-17',
+        status: 'pending',
+        type: 'development',
+        projectId: 4,
+        category: 'Frontend'
+      },
+      
+      // MAPWALA MIS Project (ID: 5) tasks
+      {
+        id: 14,
+        title: 'GIS Integration',
+        description: 'Integrate mapping and GIS functionality',
+        assignedTo: 'Nitul',
+        assignedBy: 'GIS Specialist',
+        priority: 'High',
+        dueDate: '2025-11-25',
+        startDate: '2025-11-15',
+        status: 'in-progress',
+        type: 'development',
+        projectId: 5,
+        category: 'GIS'
+      },
+      {
+        id: 15,
+        title: 'Data Visualization',
+        description: 'Create interactive charts and maps for data visualization',
+        assignedTo: 'Ankur',
+        assignedBy: 'Data Analyst',
+        priority: 'Medium',
+        dueDate: '2025-11-29',
+        startDate: '2025-11-19',
+        status: 'pending',
+        type: 'development',
+        projectId: 5,
+        category: 'Visualization'
+      }
+    ];
   };
 
   const [tasks, setTasks] = useState(loadTasks());

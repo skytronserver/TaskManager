@@ -31,48 +31,119 @@ const IndividualTasksManagement = () => {
 
   // Load individual tasks from localStorage
   const loadIndividualTasks = () => {
-    const savedTasks = localStorage.getItem('individualTasks');
-    if (savedTasks) {
-      return JSON.parse(savedTasks);
-    }
+    // Temporarily disable localStorage to show dummy tasks
+    // const savedTasks = localStorage.getItem('individualTasks');
+    // if (savedTasks) {
+    //   return JSON.parse(savedTasks);
+    // }
     // Default individual tasks
     return [
       {
         id: 1,
         title: 'Complete Personal Development Plan',
-        description: 'Create and submit your personal development plan for Q4',
-        assignedTo: 'Ankur',
-        assignedBy: 'Admin',
+        description: 'Create and submit your personal development plan for Q4 including skill assessment and learning goals',
+        assignedTo: 'Ankur Sharma',
+        assignedBy: 'HR Manager',
         priority: 'Medium',
         dueDate: '2025-11-20',
         status: 'pending',
         type: 'individual',
         category: 'Personal Development',
+        createdDate: '2025-11-01'
       },
       {
         id: 2,
         title: 'Submit Timesheet for October',
-        description: 'Fill and submit your timesheet for the month of October',
-        assignedTo: 'Nitul',
+        description: 'Fill and submit your timesheet for the month of October with detailed project hours',
+        assignedTo: 'Nitul Das',
         assignedBy: 'Admin',
         priority: 'High',
         dueDate: '2025-11-15',
         status: 'completed',
         type: 'individual',
         category: 'Administrative',
+        createdDate: '2025-10-25'
       },
       {
         id: 3,
         title: 'Attend Security Training',
-        description: 'Complete mandatory cybersecurity training module',
-        assignedTo: 'Kishalay',
-        assignedBy: 'Admin',
+        description: 'Complete mandatory cybersecurity training module and pass the assessment',
+        assignedTo: 'Kishalay Roy',
+        assignedBy: 'Security Officer',
         priority: 'High',
         dueDate: '2025-11-25',
         status: 'in-progress',
         type: 'individual',
         category: 'Training',
+        createdDate: '2025-11-05'
       },
+      {
+        id: 4,
+        title: 'Performance Review Self-Assessment',
+        description: 'Complete your quarterly performance review self-assessment form',
+        assignedTo: 'Kajal Singh',
+        assignedBy: 'Team Leader',
+        priority: 'Critical',
+        dueDate: '2025-11-18',
+        status: 'extension-requested',
+        type: 'individual',
+        category: 'Performance Review',
+        createdDate: '2025-11-03',
+        requestedExtensionDate: '2025-11-22',
+        extensionReason: 'Need more time to gather project metrics'
+      },
+      {
+        id: 5,
+        title: 'Update Emergency Contact Information',
+        description: 'Review and update your emergency contact details in the HR system',
+        assignedTo: 'Twinkle Patel',
+        assignedBy: 'HR Department',
+        priority: 'Low',
+        dueDate: '2025-11-30',
+        status: 'pending',
+        type: 'individual',
+        category: 'Administrative',
+        createdDate: '2025-11-08'
+      },
+      {
+        id: 6,
+        title: 'Complete Code Review Certification',
+        description: 'Finish the internal code review best practices certification course',
+        assignedTo: 'Ankur Sharma',
+        assignedBy: 'Tech Lead',
+        priority: 'Medium',
+        dueDate: '2025-11-28',
+        status: 'in-progress',
+        type: 'individual',
+        category: 'Professional Development',
+        createdDate: '2025-11-10'
+      },
+      {
+        id: 7,
+        title: 'Submit Expense Report',
+        description: 'Submit expense report for business travel and client meetings in October',
+        assignedTo: 'Nitul Das',
+        assignedBy: 'Finance Team',
+        priority: 'High',
+        dueDate: '2025-11-16',
+        status: 'approved',
+        type: 'individual',
+        category: 'Financial',
+        createdDate: '2025-11-02'
+      },
+      {
+        id: 8,
+        title: 'Health & Safety Training',
+        description: 'Complete annual health and safety training module and quiz',
+        assignedTo: 'Kishalay Roy',
+        assignedBy: 'Safety Officer',
+        priority: 'Medium',
+        dueDate: '2025-12-01',
+        status: 'pending',
+        type: 'individual',
+        category: 'Compliance',
+        createdDate: '2025-11-12'
+      }
     ];
   };
 

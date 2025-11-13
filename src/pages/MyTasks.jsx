@@ -26,13 +26,203 @@ const MyTasks = () => {
 
   // Load tasks from localStorage and filter by current user
   const loadMyTasks = () => {
-    const savedTasks = localStorage.getItem('allTasks');
-    if (savedTasks) {
-      const allTasks = JSON.parse(savedTasks);
-      // Filter tasks assigned to current user
-      return allTasks.filter(task => task.assignedTo === currentUser);
-    }
-    return [];
+    // Temporarily disable localStorage to show dummy tasks
+    // const savedTasks = localStorage.getItem('allTasks');
+    // if (savedTasks) {
+    //   const allTasks = JSON.parse(savedTasks);
+    //   // Filter tasks assigned to current user
+    //   return allTasks.filter(task => task.assignedTo === currentUser);
+    // }
+    // Return dummy tasks
+    return [
+      // SKYTRON BACK END Project (ID: 1) - 5 tasks
+      {
+        id: 1,
+        title: 'Implement User Authentication',
+        description: 'Create login/logout functionality with JWT tokens and password hashing',
+        assignedBy: 'Team Leader',
+        assignedTo: 'John Doe',
+        priority: 'High',
+        dueDate: '2025-11-20',
+        startDate: '2025-11-10',
+        status: 'in-progress',
+        type: 'oneTime',
+        projectId: 1,
+        category: 'Backend Development'
+      },
+      {
+        id: 2,
+        title: 'Design Dashboard UI',
+        description: 'Create responsive dashboard layout with charts and widgets using React components',
+        assignedBy: 'Project Manager',
+        assignedTo: 'John Doe',
+        priority: 'Medium',
+        dueDate: '2025-11-18',
+        startDate: '2025-11-08',
+        status: 'pending',
+        type: 'oneTime',
+        projectId: 1,
+        category: 'Frontend Development'
+      },
+      {
+        id: 3,
+        title: 'Database Schema Design',
+        description: 'Design and implement database tables for user management and task tracking',
+        assignedBy: 'Tech Lead',
+        assignedTo: 'John Doe',
+        priority: 'Critical',
+        dueDate: '2025-11-15',
+        startDate: '2025-11-05',
+        status: 'completed',
+        type: 'oneTime',
+        projectId: 1,
+        category: 'Database'
+      },
+      {
+        id: 4,
+        title: 'API Documentation',
+        description: 'Create comprehensive API documentation using Swagger/OpenAPI',
+        assignedBy: 'Tech Lead',
+        assignedTo: 'John Doe',
+        priority: 'Medium',
+        dueDate: '2025-11-22',
+        startDate: '2025-11-12',
+        status: 'pending',
+        type: 'oneTime',
+        projectId: 1,
+        category: 'Documentation'
+      },
+      {
+        id: 5,
+        title: 'Setup CI/CD Pipeline',
+        description: 'Configure automated deployment pipeline with Docker and GitHub Actions',
+        assignedBy: 'DevOps Engineer',
+        assignedTo: 'John Doe',
+        priority: 'High',
+        dueDate: '2025-11-25',
+        startDate: '2025-11-15',
+        status: 'in-progress',
+        type: 'oneTime',
+        projectId: 1,
+        category: 'DevOps'
+      },
+      
+      // Mobile App Development Project (ID: 2) - 4 tasks
+      {
+        id: 6,
+        title: 'API Integration Testing',
+        description: 'Test all REST API endpoints and ensure proper error handling',
+        assignedBy: 'QA Lead',
+        assignedTo: 'John Doe',
+        priority: 'High',
+        dueDate: '2025-11-25',
+        startDate: '2025-11-12',
+        status: 'extension-requested',
+        type: 'oneTime',
+        projectId: 2,
+        category: 'Testing'
+      },
+      {
+        id: 7,
+        title: 'Mobile App UI Components',
+        description: 'Develop reusable UI components for the mobile application',
+        assignedBy: 'Mobile Lead',
+        assignedTo: 'John Doe',
+        priority: 'Medium',
+        dueDate: '2025-11-22',
+        startDate: '2025-11-14',
+        status: 'pending',
+        type: 'repetitive',
+        projectId: 2,
+        category: 'Mobile Development'
+      },
+      {
+        id: 8,
+        title: 'Push Notification System',
+        description: 'Implement push notifications for iOS and Android platforms',
+        assignedBy: 'Mobile Lead',
+        assignedTo: 'John Doe',
+        priority: 'High',
+        dueDate: '2025-11-28',
+        startDate: '2025-11-18',
+        status: 'pending',
+        type: 'oneTime',
+        projectId: 2,
+        category: 'Mobile Development'
+      },
+      {
+        id: 9,
+        title: 'App Store Deployment',
+        description: 'Prepare and deploy mobile app to Google Play Store and Apple App Store',
+        assignedBy: 'Project Manager',
+        assignedTo: 'John Doe',
+        priority: 'Critical',
+        dueDate: '2025-12-05',
+        startDate: '2025-11-25',
+        status: 'pending',
+        type: 'oneTime',
+        projectId: 2,
+        category: 'Deployment'
+      },
+      
+      // Frontend Redesign Project (ID: 3) - 4 tasks
+      {
+        id: 10,
+        title: 'Performance Optimization',
+        description: 'Optimize application performance and reduce loading times',
+        assignedBy: 'Senior Developer',
+        assignedTo: 'John Doe',
+        priority: 'Low',
+        dueDate: '2025-11-30',
+        startDate: '2025-11-16',
+        status: 'in-progress',
+        type: 'oneTime',
+        projectId: 3,
+        category: 'Optimization'
+      },
+      {
+        id: 11,
+        title: 'Responsive Design Implementation',
+        description: 'Implement responsive design for all pages using CSS Grid and Flexbox',
+        assignedBy: 'UI/UX Designer',
+        assignedTo: 'John Doe',
+        priority: 'High',
+        dueDate: '2025-11-24',
+        startDate: '2025-11-14',
+        status: 'in-progress',
+        type: 'oneTime',
+        projectId: 3,
+        category: 'Frontend Development'
+      },
+      {
+        id: 12,
+        title: 'Dark Mode Theme',
+        description: 'Implement dark mode theme with user preference storage',
+        assignedBy: 'UI/UX Designer',
+        assignedTo: 'John Doe',
+        priority: 'Medium',
+        dueDate: '2025-11-26',
+        startDate: '2025-11-16',
+        status: 'pending',
+        type: 'oneTime',
+        projectId: 3,
+        category: 'Frontend Development'
+      },
+      {
+        id: 13,
+        title: 'Accessibility Compliance',
+        description: 'Ensure WCAG 2.1 AA compliance for all UI components',
+        assignedBy: 'QA Lead',
+        assignedTo: 'John Doe',
+        priority: 'High',
+        dueDate: '2025-12-01',
+        startDate: '2025-11-20',
+        status: 'pending',
+        type: 'oneTime',
+        projectId: 3,
+        category: 'Quality Assurance'
+      }
+    ];
   };
 
   const [tasks, setTasks] = useState(loadMyTasks());
