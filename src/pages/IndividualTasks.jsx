@@ -46,12 +46,54 @@ const IndividualTasks = () => {
   const [actionNote, setActionNote] = useState('');
   const [extensionDate, setExtensionDate] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
+  const [showTaskChat, setShowTaskChat] = useState(false);
+  const [chatMessages, setChatMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState('');
 
   const handleTaskSelect = (task) => {
     setSelectedTask(task);
     setActionType('');
     setActionNote('');
     setExtensionDate('');
+    setShowTaskChat(false);
+    // Load chat messages for this task
+    loadTaskChatMessages(task.id);
+  };
+
+  const loadTaskChatMessages = (taskId) => {
+    const savedMessages = localStorage.getItem(`individualTaskChat_${taskId}`);
+    if (savedMessages) {
+      setChatMessages(JSON.parse(savedMessages));
+    } else {
+      setChatMessages([]);
+    }
+  };
+
+  const handleSendMessage = () => {
+    if (!newMessage.trim() || !selectedTask) return;
+
+    const message = {
+      id: Date.now(),
+      text: newMessage,
+      sender: currentUser,
+      timestamp: new Date().toLocaleString(),
+      taskId: selectedTask.id
+    };
+
+    const updatedMessages = [...chatMessages, message];
+    setChatMessages(updatedMessages);
+
+    // Save to localStorage with different key for individual tasks
+    localStorage.setItem(`individualTaskChat_${selectedTask.id}`, JSON.stringify(updatedMessages));
+
+    setNewMessage('');
+  };
+
+  const handleOpenTaskChat = (task, e) => {
+    e.stopPropagation(); // Prevent task selection
+    setSelectedTask(task);
+    loadTaskChatMessages(task.id);
+    setShowTaskChat(true);
   };
 
   const handleStartTask = () => {
@@ -236,18 +278,27 @@ const IndividualTasks = () => {
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span
-                        className={`inline-block px-2 py-1 rounded-full text-xs font-medium border ${getStatusColor(
-                          task.status
-                        )}`}
-                      >
-                        {task.status.replace('-', ' ').toUpperCase()}
-                      </span>
-                      {task.type === 'repetitive' && (
-                        <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full">
-                          🔄 Repetitive
+                      <div className="flex items-center gap-2">
+                        <span
+                          className={`inline-block px-2 py-1 rounded-full text-xs font-medium border ${getStatusColor(
+                            task.status
+                          )}`}
+                        >
+                          {task.status.replace('-', ' ').toUpperCase()}
                         </span>
-                      )}
+                        {task.type === 'repetitive' && (
+                          <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full">
+                            🔄 Repetitive
+                          </span>
+                        )}
+                      </div>
+                      <button
+                        onClick={(e) => handleOpenTaskChat(task, e)}
+                        className="flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 transition-colors text-xs"
+                        title="Open Task Chat"
+                      >
+                        💬 Chat
+                      </button>
                     </div>
                   </div>
                 ))
@@ -315,6 +366,69 @@ const IndividualTasks = () => {
                     </div>
                   </div>
                 </div>
+
+                {/* Task Chat Button */}
+                <div className="mb-4">
+                  <button
+                    onClick={() => setShowTaskChat(!showTaskChat)}
+                    className="w-full px-4 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium flex items-center justify-center gap-2"
+                  >
+                    💬 {showTaskChat ? 'Hide Task Chat' : 'Open Task Chat'}
+                  </button>
+                </div>
+
+                {/* Task Chat Interface */}
+                {showTaskChat && (
+                  <div className="bg-white rounded-lg p-4 border-2 border-blue-200 mb-4">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                      💬 Task Chat - {selectedTask.title}
+                    </h3>
+                    
+                    {/* Chat Messages */}
+                    <div className="bg-gray-50 rounded-lg p-3 mb-4 max-h-64 overflow-y-auto">
+                      {chatMessages.length === 0 ? (
+                        <p className="text-gray-500 text-sm text-center py-4">
+                          No messages yet. Start the conversation!
+                        </p>
+                      ) : (
+                        <div className="space-y-3">
+                          {chatMessages.map((message) => (
+                            <div key={message.id} className="bg-white rounded-lg p-3 shadow-sm">
+                              <div className="flex justify-between items-start mb-1">
+                                <span className="font-medium text-sm text-blue-600">
+                                  {message.sender}
+                                </span>
+                                <span className="text-xs text-gray-500">
+                                  {message.timestamp}
+                                </span>
+                              </div>
+                              <p className="text-sm text-gray-800">{message.text}</p>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                    
+                    {/* Message Input */}
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={newMessage}
+                        onChange={(e) => setNewMessage(e.target.value)}
+                        onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                        placeholder="Type your message..."
+                        className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                      <button
+                        onClick={handleSendMessage}
+                        disabled={!newMessage.trim()}
+                        className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        Send
+                      </button>
+                    </div>
+                  </div>
+                )}
 
                 {/* Action Buttons */}
                 <div className="space-y-3">

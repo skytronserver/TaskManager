@@ -4,15 +4,30 @@ import { useNavigate } from 'react-router-dom';
 const IndividualTasksManagement = () => {
   const navigate = useNavigate();
 
-  // All users in the system
-  const [users] = useState([
-    { id: 1, name: 'Ankur', designation: 'Team Leader' },
-    { id: 2, name: 'Nitul', designation: 'Senior Developer' },
-    { id: 3, name: 'Kishalay', designation: 'Developer' },
-    { id: 4, name: 'Kajal', designation: 'App Developer' },
-    { id: 5, name: 'Twinkle', designation: 'Developer' },
-    { id: 6, name: 'Samudra', designation: 'App Developer' },
-  ]);
+  // Load registered users from localStorage
+  const loadRegisteredUsers = () => {
+    const savedUsers = localStorage.getItem('allUsers');
+    if (savedUsers) {
+      const users = JSON.parse(savedUsers);
+      // Return all users (both active and inactive) for management purposes
+      return users.map(user => ({
+        id: user.id,
+        name: `${user.firstName} ${user.lastName}`,
+        designation: user.designation,
+        isActive: user.isActive
+      }));
+    }
+    // Default users if localStorage is empty
+    return [
+      { id: 1, name: 'Ankur Sharma', designation: 'Team Leader', isActive: true },
+      { id: 2, name: 'Nitul Das', designation: 'Senior Developer', isActive: true },
+      { id: 3, name: 'Kishalay Roy', designation: 'Developer', isActive: false },
+      { id: 4, name: 'Kajal Singh', designation: 'App Developer', isActive: true },
+      { id: 5, name: 'Twinkle Patel', designation: 'Developer', isActive: true },
+    ];
+  };
+
+  const [users] = useState(loadRegisteredUsers());
 
   // Load individual tasks from localStorage
   const loadIndividualTasks = () => {
@@ -69,6 +84,9 @@ const IndividualTasksManagement = () => {
   const [filterStatus, setFilterStatus] = useState('all');
   const [filterUser, setFilterUser] = useState('all');
   const [reassignTo, setReassignTo] = useState('');
+  const [showTaskChat, setShowTaskChat] = useState(false);
+  const [chatMessages, setChatMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState('');
 
   // Save tasks to localStorage whenever they change
   useEffect(() => {
@@ -81,6 +99,45 @@ const IndividualTasksManagement = () => {
     setActionNote('');
     setExtensionDate(task.requestedExtensionDate || '');
     setReassignTo('');
+    setShowTaskChat(false);
+    // Load chat messages for this task (from localStorage or API)
+    loadTaskChatMessages(task.id);
+  };
+
+  const loadTaskChatMessages = (taskId) => {
+    const savedMessages = localStorage.getItem(`taskChat_${taskId}`);
+    if (savedMessages) {
+      setChatMessages(JSON.parse(savedMessages));
+    } else {
+      setChatMessages([]);
+    }
+  };
+
+  const handleSendMessage = () => {
+    if (!newMessage.trim() || !selectedTask) return;
+    
+    const message = {
+      id: Date.now(),
+      text: newMessage,
+      sender: 'Admin', // Replace with actual user name
+      timestamp: new Date().toLocaleString(),
+      taskId: selectedTask.id
+    };
+    
+    const updatedMessages = [...chatMessages, message];
+    setChatMessages(updatedMessages);
+    
+    // Save to localStorage
+    localStorage.setItem(`taskChat_${selectedTask.id}`, JSON.stringify(updatedMessages));
+    
+    setNewMessage('');
+  };
+
+  const handleOpenTaskChat = (task, e) => {
+    e.stopPropagation(); // Prevent task selection
+    setSelectedTask(task);
+    loadTaskChatMessages(task.id);
+    setShowTaskChat(true);
   };
 
   const handleAction = () => {
@@ -337,10 +394,19 @@ const IndividualTasksManagement = () => {
                     
                     <p className="text-xs text-gray-600 mb-2 line-clamp-2">{task.description}</p>
                     
-                    <div className="flex flex-wrap items-center gap-3 text-xs text-gray-600">
-                      <span>👤 {task.assignedTo}</span>
-                      <span>📅 {task.dueDate}</span>
-                      <span>🏷️ {task.category}</span>
+                    <div className="flex flex-wrap items-center justify-between gap-3 text-xs text-gray-600">
+                      <div className="flex flex-wrap items-center gap-3">
+                        <span>👤 {task.assignedTo}</span>
+                        <span>📅 {task.dueDate}</span>
+                        <span>🏷️ {task.category}</span>
+                      </div>
+                      <button
+                        onClick={(e) => handleOpenTaskChat(task, e)}
+                        className="flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 transition-colors"
+                        title="Open Task Chat"
+                      >
+                        💬 Chat
+                      </button>
                     </div>
                   </div>
                 ))
@@ -394,6 +460,16 @@ const IndividualTasksManagement = () => {
                 </div>
 
                 <div className="space-y-4">
+                  {/* Task Chat Button */}
+                  <div>
+                    <button
+                      onClick={() => setShowTaskChat(!showTaskChat)}
+                      className="w-full px-4 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium flex items-center justify-center gap-2"
+                    >
+                      💬 {showTaskChat ? 'Hide Task Chat' : 'Open Task Chat'}
+                    </button>
+                  </div>
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Select Action
@@ -471,7 +547,7 @@ const IndividualTasksManagement = () => {
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
                       >
                         <option value="">Select user</option>
-                        {users.map((user) => (
+                        {users.filter(user => user.isActive).map((user) => (
                           <option key={user.id} value={user.name}>
                             {user.name} - {user.designation}
                           </option>
@@ -500,6 +576,59 @@ const IndividualTasksManagement = () => {
                     </button>
                   </div>
                 </div>
+
+                {/* Task Chat Interface */}
+                {showTaskChat && (
+                  <div className="bg-white rounded-lg p-4 border-2 border-blue-200">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                      💬 Task Chat - {selectedTask.title}
+                    </h3>
+                    
+                    {/* Chat Messages */}
+                    <div className="bg-gray-50 rounded-lg p-3 mb-4 max-h-64 overflow-y-auto">
+                      {chatMessages.length === 0 ? (
+                        <p className="text-gray-500 text-sm text-center py-4">
+                          No messages yet. Start the conversation!
+                        </p>
+                      ) : (
+                        <div className="space-y-3">
+                          {chatMessages.map((message) => (
+                            <div key={message.id} className="bg-white rounded-lg p-3 shadow-sm">
+                              <div className="flex justify-between items-start mb-1">
+                                <span className="font-medium text-sm text-blue-600">
+                                  {message.sender}
+                                </span>
+                                <span className="text-xs text-gray-500">
+                                  {message.timestamp}
+                                </span>
+                              </div>
+                              <p className="text-sm text-gray-800">{message.text}</p>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                    
+                    {/* Message Input */}
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={newMessage}
+                        onChange={(e) => setNewMessage(e.target.value)}
+                        onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                        placeholder="Type your message..."
+                        className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                      <button
+                        onClick={handleSendMessage}
+                        disabled={!newMessage.trim()}
+                        className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        Send
+                      </button>
+                    </div>
+                  </div>
+                )}
               </>
             ) : (
               <div className="text-center py-8 text-gray-500">

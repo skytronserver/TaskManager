@@ -5,6 +5,10 @@ import Chat from '../components/Chat';
 const ProjectSpecificChat = () => {
   const navigate = useNavigate();
   const { projectId } = useParams();
+  
+  // Get user role from localStorage or context (defaulting to 'member' for employees)
+  const currentUser = localStorage.getItem('currentUser') || 'Employee';
+  const userRole = localStorage.getItem('userRole') || 'member'; // 'admin' or 'member'
 
   // Mock projects data
   const [projects] = useState([
@@ -120,10 +124,10 @@ const ProjectSpecificChat = () => {
             </p>
           </div>
           <button
-            onClick={() => navigate('/project-management')}
+            onClick={() => navigate(userRole === 'admin' ? '/project-management' : '/my-tasks')}
             className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100"
           >
-            ← Back to Projects
+            ← Back to {userRole === 'admin' ? 'Projects' : 'My Tasks'}
           </button>
         </div>
 
@@ -169,23 +173,25 @@ const ProjectSpecificChat = () => {
             chatId={`project-${projectId}`}
             chatType="project"
             chatTitle={`${currentProject.name} Team Chat`}
-            currentUser="Admin"
+            currentUser={currentUser}
           />
         </div>
 
         {/* Quick Actions */}
         <div className="flex flex-col sm:flex-row gap-4 justify-end mt-6">
+          {userRole === 'admin' && (
+            <button
+              onClick={() => navigate(`/project/${projectId}/tasks`)}
+              className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center justify-center gap-2"
+            >
+              📋 Manage Tasks
+            </button>
+          )}
           <button
-            onClick={() => navigate(`/project/${projectId}/tasks`)}
-            className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center justify-center gap-2"
-          >
-            📋 Manage Tasks
-          </button>
-          <button
-            onClick={() => navigate('/project-management')}
+            onClick={() => navigate(userRole === 'admin' ? '/project-management' : '/my-tasks')}
             className="px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100"
           >
-            Back to Project Management
+            Back to {userRole === 'admin' ? 'Project Management' : 'My Tasks'}
           </button>
         </div>
       </div>

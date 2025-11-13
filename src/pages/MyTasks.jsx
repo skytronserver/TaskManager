@@ -71,6 +71,7 @@ const MyTasks = () => {
     setExtensionDate('');
   };
 
+
   const handleStartTask = () => {
     if (!selectedTask) return;
     
@@ -293,18 +294,30 @@ const MyTasks = () => {
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span
-                        className={`inline-block px-2 py-1 rounded-full text-xs font-medium border ${getStatusColor(
-                          task.status
-                        )}`}
-                      >
-                        {task.status.replace('-', ' ').toUpperCase()}
-                      </span>
-                      {task.type === 'repetitive' && (
-                        <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full">
-                          🔄 Repetitive
+                      <div className="flex items-center gap-2">
+                        <span
+                          className={`inline-block px-2 py-1 rounded-full text-xs font-medium border ${getStatusColor(
+                            task.status
+                          )}`}
+                        >
+                          {task.status.replace('-', ' ').toUpperCase()}
                         </span>
-                      )}
+                        {task.type === 'repetitive' && (
+                          <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full">
+                            🔄 Repetitive
+                          </span>
+                        )}
+                      </div>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`/project/${task.projectId}/chat`);
+                        }}
+                        className="flex items-center gap-1 px-2 py-1 bg-purple-100 text-purple-700 rounded-md hover:bg-purple-200 transition-colors text-xs"
+                        title="Project Team Chat"
+                      >
+                        👥 Team Chat
+                      </button>
                     </div>
                   </div>
                 ))
@@ -367,6 +380,16 @@ const MyTasks = () => {
                       </span>
                     </div>
                   </div>
+                </div>
+
+                {/* Team Chat Button */}
+                <div className="mb-4">
+                  <button
+                    onClick={() => navigate(`/project/${selectedTask.projectId}/chat`)}
+                    className="w-full px-4 py-3 bg-purple-600 text-white rounded-md hover:bg-purple-700 font-medium flex items-center justify-center gap-2"
+                  >
+                    👥 Project Team Chat
+                  </button>
                 </div>
 
                 {/* Action Buttons */}

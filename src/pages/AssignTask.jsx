@@ -18,15 +18,28 @@ const AssignTask = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const [showInviteModal, setShowInviteModal] = useState(false);
+  const [inviteLink, setInviteLink] = useState('');
+  const [inviteEmail, setInviteEmail] = useState('');
 
-  // Mock data - Replace with API calls
-  const usersAsPerHierarchy = [
-    { id: 1, name: 'John Doe', employeeId: 'EMP001', designation: 'CEO', level: 1 },
-    { id: 2, name: 'Jane Smith', employeeId: 'EMP002', designation: 'CTO', level: 2 },
-    { id: 3, name: 'Mike Johnson', employeeId: 'EMP003', designation: 'Team Leader', level: 3 },
-    { id: 4, name: 'Sarah Williams', employeeId: 'EMP004', designation: 'Senior Developer', level: 4 },
-    { id: 5, name: 'David Brown', employeeId: 'EMP005', designation: 'Junior Developer', level: 5 },
-  ];
+  // Load registered users from localStorage
+  const loadRegisteredUsers = () => {
+    const savedUsers = localStorage.getItem('allUsers');
+    if (savedUsers) {
+      const users = JSON.parse(savedUsers);
+      // Only return active users for task assignment
+      return users.filter(user => user.isActive);
+    }
+    // Default users if localStorage is empty
+    return [
+      { id: 1, firstName: 'Ankur', lastName: 'Sharma', employeeId: 'EMP001', designation: 'Team Leader', isActive: true },
+      { id: 2, firstName: 'Nitul', lastName: 'Das', employeeId: 'EMP002', designation: 'Senior Developer', isActive: true },
+      { id: 4, firstName: 'Kajal', lastName: 'Singh', employeeId: 'EMP004', designation: 'App Developer', isActive: true },
+      { id: 5, firstName: 'Twinkle', lastName: 'Patel', employeeId: 'EMP005', designation: 'Developer', isActive: true },
+    ];
+  };
+
+  const registeredUsers = loadRegisteredUsers();
 
   const priorities = ['Low', 'Medium', 'High', 'Critical'];
 
@@ -84,6 +97,40 @@ const AssignTask = () => {
     }
   };
 
+  const generateInviteLink = () => {
+    const baseUrl = window.location.origin;
+    const inviteToken = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    const link = `${baseUrl}/task-invite/${inviteToken}?expires=${Date.now() + 7 * 24 * 60 * 60 * 1000}`;
+    setInviteLink(link);
+    setShowInviteModal(true);
+  };
+
+  const copyInviteLink = () => {
+    navigator.clipboard.writeText(inviteLink).then(() => {
+      alert('Invite link copied to clipboard!');
+    }).catch(() => {
+      alert('Failed to copy link. Please copy manually.');
+    });
+  };
+
+  const sendInviteEmail = () => {
+    if (!inviteEmail) {
+      alert('Please enter an email address.');
+      return;
+    }
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(inviteEmail)) {
+      alert('Please enter a valid email address.');
+      return;
+    }
+
+    console.log('Sending invite email to:', inviteEmail, 'with link:', inviteLink);
+    alert(`Invite sent to ${inviteEmail}!`);
+    setInviteEmail('');
+    setShowInviteModal(false);
+  };
+
   const handleReset = () => {
     setFormData({
       taskTitle: '',
@@ -104,9 +151,30 @@ const AssignTask = () => {
   return (
     <div className="w-full max-w-7xl mx-auto">
       <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 md:p-8">
-        <h1 className="text-2xl sm:text-3xl font-semibold text-blue-600 mb-4 sm:mb-6">
-          Assign Task
-        </h1>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-semibold text-blue-600">
+              Assign Task
+            </h1>
+            <p className="text-gray-600 mt-1">
+              Create and assign individual tasks to registered users
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <button
+              onClick={generateInviteLink}
+              className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 flex items-center gap-2"
+            >
+              📧 Generate Invite Link
+            </button>
+            <button
+              onClick={() => navigate('/')}
+              className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100"
+            >
+              ← Back to Dashboard
+            </button>
+          </div>
+        </div>
 
         <div className="space-y-6">
           {/* Assignment Type Selection */}
@@ -146,7 +214,7 @@ const AssignTask = () => {
                 <p className="text-xs text-gray-600 mt-2">
                   {formData.assignmentType === 'self' 
                     ? 'Task will be assigned to yourself' 
-                    : 'Assign task to team members based on organizational hierarchy'}
+                    : 'Assign task to registered users in the system'}
                 </p>
               </div>
 
@@ -163,10 +231,10 @@ const AssignTask = () => {
                       errors.assignTo ? 'border-red-500' : 'border-gray-300'
                     }`}
                   >
-                    <option value="">Select user from hierarchy</option>
-                    {usersAsPerHierarchy.map((user) => (
+                    <option value="">Select registered user</option>
+                    {registeredUsers.map((user) => (
                       <option key={user.id} value={user.id}>
-                        {user.name} - {user.designation} (Level {user.level})
+                        {user.firstName} {user.lastName} - {user.designation} ({user.employeeId})
                       </option>
                     ))}
                   </select>
@@ -419,6 +487,13 @@ const AssignTask = () => {
               Reset
             </button>
             <button
+              type="button"
+              onClick={() => navigate('/')}
+              className="w-full sm:w-auto px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100"
+            >
+              Cancel
+            </button>
+            <button
               type="submit"
               onClick={handleSubmit}
               className="w-full sm:w-auto px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
@@ -428,6 +503,78 @@ const AssignTask = () => {
           </div>
         </div>
       </div>
+
+      {/* Invite Modal */}
+      {showInviteModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold text-gray-800">📧 Invite to Task</h3>
+              <button
+                onClick={() => setShowInviteModal(false)}
+                className="text-gray-500 hover:text-gray-700 text-xl"
+              >
+                ✕
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Task Invite Link
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={inviteLink}
+                    readOnly
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-sm"
+                  />
+                  <button
+                    onClick={copyInviteLink}
+                    className="px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm"
+                  >
+                    📋 Copy
+                  </button>
+                </div>
+                <p className="text-xs text-gray-500 mt-1">
+                  Link expires in 7 days
+                </p>
+              </div>
+
+              <div className="border-t pt-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Or send via email
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    type="email"
+                    value={inviteEmail}
+                    onChange={(e) => setInviteEmail(e.target.value)}
+                    placeholder="Enter email address..."
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <button
+                    onClick={sendInviteEmail}
+                    className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 text-sm"
+                  >
+                    Send
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-2 mt-6">
+              <button
+                onClick={() => setShowInviteModal(false)}
+                className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

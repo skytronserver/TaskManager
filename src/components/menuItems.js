@@ -21,7 +21,7 @@ export const menuItems = {
     { text: 'Organisational Hierarchy', icon: '🎯', path: '/designation', roles: ['admin'] },
   ],
 
-  Assign: [
+  Individual: [
     { text: 'Assign Individual Task', icon: '📝', path: '/assign-task', roles: ['admin'] },
     { text: 'Individual Tasks', icon: '📋', path: '/individual-tasks-management', roles: ['admin'] },
   ],
@@ -36,7 +36,6 @@ export const menuItems = {
   ],
 
   Communication: [
-    { text: 'Individual Chat', icon: '💬', path: '/task-chat', roles: ['admin', 'user'] },
   ],
 
   MyWork: [
