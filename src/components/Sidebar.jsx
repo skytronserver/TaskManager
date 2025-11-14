@@ -96,7 +96,7 @@ const Sidebar = ({ open = true, mobileOpen = false, onMobileClose = () => {} }) 
     Department: true,
     Organization: true,
     CreateUsers: true,
-    CreateProject: true,
+    Project: true,
     Individual: true,
     Holiday: true,
     Communication: true,
@@ -127,6 +127,25 @@ const Sidebar = ({ open = true, mobileOpen = false, onMobileClose = () => {} }) 
       const regex = new RegExp(`^${pathPattern}$`);
       return regex.test(location.pathname);
     }
+    
+    // Handle query parameters for reports
+    if (itemPath.includes('?')) {
+      const [path, query] = itemPath.split('?');
+      if (location.pathname === path) {
+        const currentParams = new URLSearchParams(location.search);
+        const itemParams = new URLSearchParams(query);
+        
+        // Check if all item parameters match current URL parameters
+        for (const [key, value] of itemParams) {
+          if (currentParams.get(key) !== value) {
+            return false;
+          }
+        }
+        return true;
+      }
+      return false;
+    }
+    
     return location.pathname === itemPath;
   };
 
@@ -229,8 +248,8 @@ const Sidebar = ({ open = true, mobileOpen = false, onMobileClose = () => {} }) 
           <Divider sx={{ my: 2, opacity: 0.5 }} />
         )}
 
-        {renderCategory('Create Project', menuItems.CreateProject, 'CreateProject')}
-        {filterMenuItems(menuItems.CreateProject).length > 0 && (
+        {renderCategory('Project', menuItems.Project, 'Project')}
+        {filterMenuItems(menuItems.Project).length > 0 && (
           <Divider sx={{ my: 2, opacity: 0.5 }} />
         )}
 
@@ -246,6 +265,11 @@ const Sidebar = ({ open = true, mobileOpen = false, onMobileClose = () => {} }) 
 
         {renderCategory('My Work', menuItems.MyWork, 'MyWork')}
         {filterMenuItems(menuItems.MyWork).length > 0 && (
+          <Divider sx={{ my: 2, opacity: 0.5 }} />
+        )}
+
+        {renderCategory('Reports', menuItems.Reports, 'Reports')}
+        {filterMenuItems(menuItems.Reports).length > 0 && (
           <Divider sx={{ my: 2, opacity: 0.5 }} />
         )}
       </Box>

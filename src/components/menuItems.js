@@ -26,9 +26,10 @@ export const menuItems = {
     { text: 'Individual Tasks', icon: '📋', path: '/individual-tasks-management', roles: ['admin'] },
   ],
 
-  CreateProject: [
+  Project: [
     { text: 'Project', icon: '📁', path: '/create-project', roles: ['admin'] },
     { text: 'Project Management', icon: '📂', path: '/project-management', roles: ['admin'] },
+    { text: "Today's Deadlines (Admin)", icon: '👨‍💼', path: '/admin-todays-deadlines', roles: ['admin'] },
   ],
 
   Holiday: [
@@ -39,6 +40,7 @@ export const menuItems = {
   ],
 
   MyWork: [
+    { text: "Today's Deadlines", icon: '🗓️', path: '/employee-todays-deadlines', roles: ['member'] },
     { text: 'View Tasks', icon: '✅', path: '/my-tasks', roles: ['member'] },
     { text: 'Individual Tasks', icon: '🎯', path: '/individual-tasks', roles: ['member'] },
     // { text: 'My Queries', icon: '💬', path: '/member-query', roles: ['member'] },
@@ -49,7 +51,8 @@ export const menuItems = {
   //   { text: 'Alert Management', icon: '🔔', path: '/alert-management', roles: ['admin', 'user'] },
   // ],
 
-  // Reports: [
-  //   { text: 'View Reports', icon: '📈', path: '/reports', roles: ['admin', 'user'] },
-  // ],
+  Reports: [
+    { text: 'Project Performance', icon: '📈', path: '/reports?tab=project', roles: ['admin'] },
+    { text: 'Employee Performance', icon: '👤', path: '/reports?tab=employee', roles: ['admin'] },
+  ],
 };

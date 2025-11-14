@@ -29,6 +29,9 @@ import TaskChat from './pages/TaskChat'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import JoinProject from './pages/JoinProject'
+import TodaysDeadlines from './pages/TodaysDeadlines'
+import AdminTodaysDeadlines from './pages/AdminTodaysDeadlines'
+import EmployeeTodaysDeadlines from './pages/EmployeeTodaysDeadlines'
 
 export default function AppRoutes() {
   return (
@@ -63,6 +66,9 @@ export default function AppRoutes() {
       <Route path="/holiday-calendar" element={<HolidayCalendar />} />
       <Route path="/project-chat" element={<ProjectChat />} />
       <Route path="/task-chat" element={<TaskChat />} />
+      <Route path="/todays-deadlines" element={<TodaysDeadlines />} />
+      <Route path="/admin-todays-deadlines" element={<AdminTodaysDeadlines />} />
+      <Route path="/employee-todays-deadlines" element={<EmployeeTodaysDeadlines />} />
     </Routes>
   )
 }
